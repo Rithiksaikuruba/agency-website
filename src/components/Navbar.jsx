@@ -1,131 +1,148 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { 
-  motion, 
-  AnimatePresence, 
-  useScroll, 
-  useMotionValueEvent, 
-  useSpring, 
-  useMotionValue 
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useMotionValueEvent,
+  useSpring,
+  useMotionValue,
 } from 'framer-motion';
 import { Menu, X, Zap, Sparkles, Twitter, Instagram, Linkedin, ArrowRight } from 'lucide-react';
 
-/* --- FIX 2: Safe asset import ---
-   Ensure the file on disk is named EXACTLY "Navicon.png" (capital N, capital i).
-   Linux (Vercel) is case-sensitive — navicon.png ≠ Navicon.png.
-   If you ever rename it, update the import below to match exactly.
-*/
+/* ─── ASSET ───────────────────────────────────────────────────────────────── */
 import navIcon from '../assets/Navicon.png';
 
-/* --- 1. CONSTANTS --- */
+/* ─── CONSTANTS ───────────────────────────────────────────────────────────── */
 const NAV_LINKS = [
   { label: 'Services',     href: '#services',     desc: 'Our expertise'  },
   { label: 'Process',      href: '#process',      desc: 'How we work'    },
   { label: 'Pricing',      href: '#pricing',      desc: 'Costs'          },
-  { label: 'Testimonials', href: '#testimonials', desc: 'Client reviews' }, 
+  { label: 'Testimonials', href: '#testimonials', desc: 'Client reviews' },
 ];
 
 const SOCIAL_LINKS = [
-  { icon: <Twitter   size={20} aria-hidden="true" />, label: "Twitter",   href: "#" }, 
-  { icon: <Instagram size={20} aria-hidden="true" />, label: "Instagram", href: "#" }, 
-  { icon: <Linkedin  size={20} aria-hidden="true" />, label: "LinkedIn",  href: "#" },
+  { icon: <Twitter   size={20} aria-hidden="true" />, label: 'Twitter',   href: '#' },
+  { icon: <Instagram size={20} aria-hidden="true" />, label: 'Instagram', href: '#' },
+  { icon: <Linkedin  size={20} aria-hidden="true" />, label: 'LinkedIn',  href: '#' },
 ];
 
 const BOOKING_URL = 'https://cal.com/stryvenix/30min';
 
-/* --- SMOOTH SCROLL UTILITY WITH OFFSET --- */
+/* ─── SMOOTH SCROLL ───────────────────────────────────────────────────────── */
 const handleScroll = (e, href) => {
-  if (href.startsWith('#')) {
-    e.preventDefault();
-    const targetId = href.replace('#', '');
-
-    if (targetId === '') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      const elem = document.getElementById(targetId);
-      if (elem) {
-        const elementPosition = elem.getBoundingClientRect().top + window.scrollY;
-        const offset = 100;
-        window.scrollTo({ top: elementPosition - offset, behavior: 'smooth' });
-      }
-    }
+  if (!href.startsWith('#')) return;
+  e.preventDefault();
+  const targetId = href.replace('#', '');
+  if (!targetId) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    return;
+  }
+  const elem = document.getElementById(targetId);
+  if (elem) {
+    const top = elem.getBoundingClientRect().top + window.scrollY - 100;
+    window.scrollTo({ top, behavior: 'smooth' });
   }
 };
 
-/* --- FIX 3: Global CSS — NO @import inside a component <style> tag.
-   The Google Fonts link has been REMOVED from here and must live in
-   your  public/index.html  <head> instead (see comment at bottom of file).
-   
-   The shimmer keyframe and utility classes remain here because they are
-   component-scoped and have no equivalent in Tailwind's base stylesheet.
-*/
-const GlobalStyles = () => (
-  <style>{`
-    :root {
-      --font-body: 'Plus Jakarta Sans', sans-serif;
-    }
+/* ─── GLOBAL STYLES (defined ONCE outside the component tree) ─────────────
+   Keeping this outside prevents the <style> tag from being torn down and
+   re-injected on every render.
+──────────────────────────────────────────────────────────────────────────── */
+const GLOBAL_CSS = `
+  :root { --font-body: 'Plus Jakarta Sans', sans-serif; }
 
-    body {
-      font-family: var(--font-body);
-      overflow-x: hidden;
-      background-color: #f8fafc;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      background-image:
-        linear-gradient(to right,  rgba(15, 23, 42, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(15, 23, 42, 0.03) 1px, transparent 1px);
-      background-size: 40px 40px;
-    }
+  body {
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    background-color: #f8fafc;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image:
+      linear-gradient(to right,  rgba(15,23,42,.03) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(15,23,42,.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
 
-    .bg-noise {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      pointer-events: none; z-index: 0; opacity: 0.03;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-    }
+  /* Promote the fixed header to its own GPU compositor layer so scroll
+     never triggers a repaint of the main document. */
+  .navbar-root { will-change: transform; }
 
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  .bg-noise {
+    position: fixed; top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    pointer-events: none; z-index: 0; opacity: .03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 
-    @keyframes shimmer {
-      100% { transform: translateX(150%); }
-    }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-    .focus-ring { outline: none; }
-    .focus-ring:focus-visible {
-      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.5);
-      border-radius: 9999px;
-    }
-  `}</style>
-);
+  @keyframes shimmer { 100% { transform: translateX(150%); } }
 
-/* --- 3. MICRO-COMPONENTS --- */
+  .focus-ring { outline: none; }
+  .focus-ring:focus-visible {
+    box-shadow: 0 0 0 3px rgba(37,99,235,.5);
+    border-radius: 9999px;
+  }
 
-// A. MAGNETIC WRAPPER
+  /* Pure-CSS pill transition so we never need framer-motion layout recalc */
+  .navbar-pill {
+    transition:
+      width          0.45s cubic-bezier(0.34,1.56,0.64,1),
+      border-radius  0.45s cubic-bezier(0.34,1.56,0.64,1),
+      background     0.3s  ease,
+      box-shadow     0.3s  ease,
+      border-color   0.3s  ease,
+      padding        0.3s  ease;
+  }
+`;
+
+/* Inject once when module loads – never again */
+if (typeof document !== 'undefined') {
+  const tag = document.getElementById('navbar-styles');
+  if (!tag) {
+    const s = document.createElement('style');
+    s.id = 'navbar-styles';
+    s.textContent = GLOBAL_CSS;
+    document.head.appendChild(s);
+  }
+}
+
+/* ─── MAGNETIC WRAPPER ────────────────────────────────────────────────────
+   Uses requestAnimationFrame to throttle position updates so we're never
+   doing more work than the browser can actually paint.
+──────────────────────────────────────────────────────────────────────────── */
 const MagneticWrapper = ({ children, strength = 0.25 }) => {
-  const ref = useRef(null);
-  const position = { x: useMotionValue(0), y: useMotionValue(0) };
-  const springConfig = { damping: 20, stiffness: 200, mass: 0.5 };
-  const springX = useSpring(position.x, springConfig);
-  const springY = useSpring(position.y, springConfig);
+  const ref    = useRef(null);
+  const rafId  = useRef(null);
+  const mx     = useMotionValue(0);
+  const my     = useMotionValue(0);
+  const sx     = useSpring(mx, { damping: 20, stiffness: 200, mass: 0.5 });
+  const sy     = useSpring(my, { damping: 20, stiffness: 200, mass: 0.5 });
 
-  const handleMouseMove = (e) => {
-    if (!ref.current) return;
-    const { clientX, clientY } = e;
-    const { left, top, width, height } = ref.current.getBoundingClientRect();
-    position.x.set((clientX - (left + width  / 2)) * strength);
-    position.y.set((clientY - (top  + height / 2)) * strength);
-  };
+  const handleMouseMove = useCallback((e) => {
+    if (rafId.current) return;                      // skip if previous frame not done
+    rafId.current = requestAnimationFrame(() => {
+      rafId.current = null;
+      if (!ref.current) return;
+      const { left, top, width, height } = ref.current.getBoundingClientRect();
+      mx.set((e.clientX - (left + width  / 2)) * strength);
+      my.set((e.clientY - (top  + height / 2)) * strength);
+    });
+  }, [mx, my, strength]);
 
-  const handleMouseLeave = () => {
-    position.x.set(0);
-    position.y.set(0);
-  };
+  const handleMouseLeave = useCallback(() => {
+    if (rafId.current) { cancelAnimationFrame(rafId.current); rafId.current = null; }
+    mx.set(0);
+    my.set(0);
+  }, [mx, my]);
 
   return (
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      style={{ x: springX, y: springY }}
+      style={{ x: sx, y: sy }}
       className="inline-block"
     >
       {children}
@@ -133,7 +150,7 @@ const MagneticWrapper = ({ children, strength = 0.25 }) => {
   );
 };
 
-// B. DESKTOP NAV
+/* ─── DESKTOP NAV ─────────────────────────────────────────────────────────── */
 const DesktopNav = ({ links }) => {
   const [hoveredIndex, setHoveredIndex] = useState(null);
 
@@ -155,7 +172,7 @@ const DesktopNav = ({ links }) => {
           {hoveredIndex === index && (
             <motion.div
               layoutId="nav-pill"
-              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+              transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
               className="absolute inset-0 bg-white rounded-full shadow-sm border border-slate-200/60"
               style={{ zIndex: 0 }}
             />
@@ -167,7 +184,9 @@ const DesktopNav = ({ links }) => {
               transition={{ duration: 0.3, ease: [0.33, 1, 0.68, 1] }}
             >
               <span className="flex items-center h-5">{link.label}</span>
-              <span className="flex items-center h-5 text-blue-600" aria-hidden="true">{link.label}</span>
+              <span className="flex items-center h-5 text-blue-600" aria-hidden="true">
+                {link.label}
+              </span>
             </motion.div>
           </div>
         </a>
@@ -176,21 +195,22 @@ const DesktopNav = ({ links }) => {
   );
 };
 
-// C. MOBILE MENU
+/* ─── MOBILE MENU ─────────────────────────────────────────────────────────── */
 const MobileMenu = ({ isOpen, onClose }) => (
   <AnimatePresence>
     {isOpen && (
       <motion.nav
         id="mobile-menu"
-        initial={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
-        animate={{ opacity: 1, clipPath: "circle(150% at 100% 0%)" }}
-        exit={{ opacity: 0, clipPath: "circle(0% at 100% 0%)" }}
+        initial={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
+        animate={{ opacity: 1, clipPath: 'circle(150% at 100% 0%)' }}
+        exit={{ opacity: 0, clipPath: 'circle(0% at 100% 0%)' }}
         transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
         className="fixed inset-0 z-40 bg-slate-50/95 backdrop-blur-2xl md:hidden flex flex-col pt-28 px-6 pb-6"
+        style={{ willChange: 'clip-path, opacity' }}
       >
         <div
           className="absolute inset-0 opacity-[0.05] pointer-events-none"
-          style={{ backgroundImage: 'radial-gradient(#000 1px, transparent 1px)', backgroundSize: '24px 24px' }}
+          style={{ backgroundImage: 'radial-gradient(#000 1px,transparent 1px)', backgroundSize: '24px 24px' }}
           aria-hidden="true"
         />
 
@@ -201,9 +221,10 @@ const MobileMenu = ({ isOpen, onClose }) => (
               href={link.href}
               onClick={(e) => { handleScroll(e, link.href); onClose(); }}
               initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: i * 0.05 + 0.1, type: "spring", stiffness: 300, damping: 24 }}
+              animate={{ x: 0,  opacity: 1 }}
+              transition={{ delay: i * 0.05 + 0.1, type: 'spring', stiffness: 300, damping: 24 }}
               className="group relative flex items-center justify-between p-5 rounded-2xl bg-white border border-slate-200/60 shadow-sm active:scale-[0.98] transition-all"
+              style={{ willChange: 'transform, opacity' }}
             >
               <div>
                 <span className="block text-2xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
@@ -225,6 +246,7 @@ const MobileMenu = ({ isOpen, onClose }) => (
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
           className="mt-auto z-10 pt-4 space-y-4"
+          style={{ willChange: 'transform, opacity' }}
         >
           <a
             href="#contact"
@@ -253,42 +275,59 @@ const MobileMenu = ({ isOpen, onClose }) => (
   </AnimatePresence>
 );
 
-/* --- 4. MAIN NAVBAR COMPONENT --- */
+/* ─── MAIN NAVBAR ─────────────────────────────────────────────────────────── */
 export default function Navbar() {
-  const [isOpen, setIsOpen]       = useState(false);
+  const [isOpen,     setIsOpen]     = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  /* ── Scroll detection ─────────────────────────────────────────────────
+     useMotionValueEvent already runs outside React's render cycle, so it
+     won't cause extra re-renders while scrolling.  We only setState when
+     the threshold is actually crossed (not on every scroll tick).
+  ──────────────────────────────────────────────────────────────────────── */
   const { scrollY } = useScroll();
-  useMotionValueEvent(scrollY, "change", (latest) => {
-    setIsScrolled(latest > 20);
+
+  useMotionValueEvent(scrollY, 'change', (latest) => {
+    const crossed = latest > 20;
+    // Only setState when the boundary is crossed – not on every pixel
+    setIsScrolled((prev) => (prev !== crossed ? crossed : prev));
   });
 
+  /* ── Lock body scroll when mobile menu is open ─────────────────────── */
   useEffect(() => {
-    const originalStyle = window.getComputedStyle(document.body).overflow;
+    const prev = document.body.style.overflow;
     document.body.style.overflow = isOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = originalStyle; };
+    return () => { document.body.style.overflow = prev; };
   }, [isOpen]);
 
   return (
     <>
-      <GlobalStyles />
       <div className="bg-noise" aria-hidden="true" />
 
+      {/*
+        KEY CHANGE: removed the `layout` prop from this motion.div.
+        `layout` forces framer-motion to measure the DOM on every render,
+        which is extremely expensive when triggered by scroll events.
+
+        Instead we drive the pill → full-width transition with pure CSS
+        (the `.navbar-pill` class above uses CSS transitions on width,
+        border-radius, etc.) which runs entirely on the compositor thread
+        and never blocks the main thread during scrolling.
+      */}
       <motion.header
+        className="navbar-root fixed top-0 w-full z-50 px-3 md:px-4 pt-4 md:pt-6 flex justify-center pointer-events-none"
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        transition={{ duration: 0.8, type: "spring", bounce: 0.3 }}
-        className="fixed top-0 w-full z-50 px-3 md:px-4 pt-4 md:pt-6 flex justify-center pointer-events-none"
+        transition={{ duration: 0.8, type: 'spring', bounce: 0.3 }}
       >
-        <motion.div
-          layout
-          style={{ width: isScrolled ? "auto" : "100%", maxWidth: "1150px" }}
-          transition={{ type: "spring", stiffness: 250, damping: 25 }}
+        <div
           className={`
-            pointer-events-auto group relative transition-all duration-500 flex items-center
+            navbar-pill
+            pointer-events-auto relative flex items-center mx-auto
             ${isScrolled
-              ? 'rounded-full bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-xl shadow-slate-200/20 px-2 py-2'
-              : 'rounded-3xl md:rounded-full bg-white/40 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent px-4 py-3 md:px-0 md:py-4'}
+              ? 'w-auto max-w-none rounded-full bg-white/80 backdrop-blur-xl border border-slate-200/60 shadow-xl shadow-slate-200/20 px-2 py-2'
+              : 'w-full max-w-[1150px] rounded-3xl md:rounded-full bg-white/40 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/40 md:border-transparent px-4 py-3 md:px-0 md:py-4'
+            }
           `}
         >
           <div className="relative flex items-center justify-between w-full z-10 px-2 md:px-4 pl-4 md:pl-6">
@@ -311,7 +350,7 @@ export default function Navbar() {
             {/* DESKTOP NAV */}
             <DesktopNav links={NAV_LINKS} />
 
-            {/* CTA BUTTON */}
+            {/* CTA */}
             <div className="hidden md:flex pl-8">
               <MagneticWrapper strength={0.2}>
                 <motion.a
@@ -321,8 +360,12 @@ export default function Navbar() {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className="focus-ring cursor-pointer group relative overflow-hidden rounded-full bg-gradient-to-r from-blue-600 via-indigo-600 to-violet-600 text-white px-7 py-3 text-sm font-bold shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40 transition-shadow duration-300 border border-white/20 block"
+                  style={{ willChange: 'transform' }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-[shimmer_0.75s_ease-in-out]" aria-hidden="true" />
+                  <div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-[shimmer_0.75s_ease-in-out]"
+                    aria-hidden="true"
+                  />
                   <span className="relative z-10 flex items-center gap-2 tracking-wide">
                     Let's Talk
                     <motion.span
@@ -346,21 +389,32 @@ export default function Navbar() {
             >
               <AnimatePresence mode="wait">
                 {isOpen ? (
-                  <motion.div key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
+                  <motion.div
+                    key="close"
+                    initial={{ rotate: -90, opacity: 0 }}
+                    animate={{ rotate: 0,   opacity: 1 }}
+                    exit={{ rotate: 90, opacity: 0 }}
+                    style={{ willChange: 'transform, opacity' }}
+                  >
                     <X size={20} aria-hidden="true" />
                   </motion.div>
                 ) : (
-                  <motion.div key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }}>
+                  <motion.div
+                    key="menu"
+                    initial={{ rotate: 90, opacity: 0 }}
+                    animate={{ rotate: 0,  opacity: 1 }}
+                    exit={{ rotate: -90, opacity: 0 }}
+                    style={{ willChange: 'transform, opacity' }}
+                  >
                     <Menu size={20} aria-hidden="true" />
                   </motion.div>
                 )}
               </AnimatePresence>
             </button>
           </div>
-        </motion.div>
+        </div>
       </motion.header>
 
-      {/* MOBILE FULLSCREEN MENU */}
       <MobileMenu isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
@@ -368,8 +422,7 @@ export default function Navbar() {
 
 /*
   ╔══════════════════════════════════════════════════════════════╗
-  ║  REQUIRED: Add this to your  public/index.html  <head>      ║
-  ║  (or your framework's equivalent — _document.jsx, etc.)     ║
+  ║  Add to public/index.html <head>:                           ║
   ║                                                              ║
   ║  <link rel="preconnect" href="https://fonts.googleapis.com"> ║
   ║  <link rel="preconnect" href="https://fonts.gstatic.com"     ║
@@ -378,8 +431,4 @@ export default function Navbar() {
   ║    Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"  ║
   ║    rel="stylesheet">                                         ║
   ╚══════════════════════════════════════════════════════════════╝
-
-  REQUIRED: Install missing packages (run once in your project root)
-  ─────────────────────────────────────────────────────────────────
-  npm install framer-motion lucide-react
 */
