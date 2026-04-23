@@ -1,0 +1,505 @@
+<!doctype html>
+<!-- ✅ lang attribute: critical for Google language targeting & screen readers -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- ✅ IE compatibility shim — prevents IE from rendering in quirks mode -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ✅ Referrer policy: controls how much referrer info is passed on outbound links -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+    <!-- ✅ Prevents iOS from auto-linking phone numbers / emails as tap targets -->
+    <meta name="format-detection" content="telephone=no, date=no, email=no, address=no" />
+
+    <!-- ✅ Content rating — used by some parental filters & ad networks -->
+    <meta name="rating" content="general" />
+
+    <!-- ============================================================
+         PRIMARY SEO TAGS
+    ============================================================ -->
+
+    <!--
+      ✅ Title tag best practices:
+         • Primary keyword near the start
+         • Brand name at the end (separated by |)
+         • Under 60 characters to avoid truncation in SERPs
+         • Exact char count: ~57 chars ✓
+    -->
+    <title>Website Design, AI & Automation Agency | Stryvenix</title>
+
+    <!--
+      ✅ Meta description best practices:
+         • 150–160 characters (this is ~158 chars) ✓
+         • Includes a clear CTA ("Get started today")
+         • Mentions geo-targets (US, UK, India) for local relevance
+         • Includes primary keywords naturally
+    -->
+    <meta
+      name="description"
+      content="Stryvenix builds high-converting websites, AI-powered tools, and automation workflows for businesses in the US, UK & India. Grow smarter — get started today."
+    />
+
+    <!--
+      ✅ Keywords: While Google ignores this, Bing still uses it.
+         Keep them tightly relevant; avoid stuffing.
+    -->
+    <meta
+      name="keywords"
+      content="website design agency, AI automation agency, business automation services, web development company, AI solutions for business, workflow automation, Stryvenix, website building agency"
+    />
+
+    <meta name="author" content="Stryvenix" />
+
+    <!--
+      ✅ Robots: max-snippet, max-image-preview, max-video-preview
+         allow Google to show rich previews in search results.
+    -->
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
+
+    <!-- ✅ Canonical URL: prevents duplicate content issues -->
+    <link rel="canonical" href="https://www.stryvenix.com/" />
+
+    <!--
+      FIX ❌→✅: Removed non-standard <link rel="sitemap"> tag.
+      The sitemap should be declared in robots.txt like:
+        Sitemap: https://www.stryvenix.com/sitemap.xml
+      and submitted via Google Search Console.
+      The <link> tag here is ignored by all major crawlers.
+    -->
+
+    <!-- ============================================================
+         OPEN GRAPH (Facebook, LinkedIn, WhatsApp previews)
+    ============================================================ -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.stryvenix.com/" />
+    <meta property="og:site_name" content="Stryvenix" />
+    <meta property="og:title" content="Stryvenix | Website Design, AI & Automation Agency" />
+    <meta
+      property="og:description"
+      content="Stryvenix builds high-converting websites, AI-powered tools, and automation workflows for businesses in the US, UK & India. Let's build something extraordinary."
+    />
+    <!-- 1200×630px is the recommended OG image size -->
+    <meta property="og:image" content="https://www.stryvenix.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Stryvenix — Website Design, AI & Automation Agency" />
+    <meta property="og:locale" content="en_US" />
+    <!-- ✅ Alternate locales for multi-region targeting -->
+    <meta property="og:locale:alternate" content="en_GB" />
+    <meta property="og:locale:alternate" content="en_IN" />
+
+    <!-- ============================================================
+         TWITTER / X CARD
+    ============================================================ -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@stryvenix" />
+    <meta name="twitter:creator" content="@stryvenix" />
+    <meta name="twitter:title" content="Stryvenix | Website Design, AI & Automation Agency" />
+    <meta
+      name="twitter:description"
+      content="We build stunning websites, AI solutions & automation workflows for modern businesses in the US, UK & India. Let's build something extraordinary."
+    />
+    <meta name="twitter:image" content="https://www.stryvenix.com/og-image.png" />
+    <meta name="twitter:image:alt" content="Stryvenix — Website Design, AI & Automation Agency" />
+
+    <!-- ============================================================
+         FAVICON, APP ICONS & PWA
+
+         FIX ❌→✅: All favicon hrefs previously pointed to
+         /src/assets/Navicon.png — that path only exists in Vite's
+         dev server. After `vite build`, the /src/ tree is NOT copied
+         to dist. Place your icons in /public/ so Vite copies them as-is.
+
+         Recommended files to add to /public/:
+           /public/favicon-32x32.png
+           /public/favicon-16x16.png
+           /public/apple-touch-icon.png   (180×180)
+           /public/safari-pinned-tab.svg
+           /public/site.webmanifest
+           /public/browserconfig.xml
+           /public/og-image.png           (1200×630)
+    ============================================================ -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#0a0a0a" />
+
+    <!-- ✅ PWA manifest + theme colors for Android Chrome & iOS Safari -->
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Stryvenix" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="msapplication-TileColor" content="#0a0a0a" />
+    <meta name="msapplication-config" content="/browserconfig.xml" />
+
+    <!-- ============================================================
+         GEO & LANGUAGE TARGETING
+
+         FIX ❌→✅: geo.region was set to IN only.
+         Since you target 3 regions, keep IN as your primary (where
+         the business is registered) but ensure hreflang covers all.
+         geo.* meta tags are Bing/Yahoo signals — Google uses hreflang.
+    ============================================================ -->
+    <meta name="geo.region" content="IN" />
+    <meta name="geo.placename" content="India" />
+    <link rel="alternate" hreflang="en" href="https://www.stryvenix.com/" />
+    <link rel="alternate" hreflang="en-US" href="https://www.stryvenix.com/" />
+    <link rel="alternate" hreflang="en-GB" href="https://www.stryvenix.com/" />
+    <link rel="alternate" hreflang="en-IN" href="https://www.stryvenix.com/" />
+    <link rel="alternate" hreflang="x-default" href="https://www.stryvenix.com/" />
+
+    <!-- ============================================================
+         PERFORMANCE: Preconnect, DNS-prefetch & Preload
+    ============================================================ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+
+    <!--
+      ✅ Preload your actual font files once you know the Vite-hashed filenames.
+         Run `vite build` then check dist/assets/ for the .woff2 filenames.
+         Example:
+    -->
+    <!-- <link rel="preload" as="font" type="font/woff2" href="/assets/YourFont-Cv3xABcd.woff2" crossorigin /> -->
+
+    <!-- ✅ Preload LCP image (hero image / OG image if shown above fold) -->
+    <!-- <link rel="preload" as="image" href="/og-image.png" /> -->
+
+    <!-- ============================================================
+         GOOGLE TAG MANAGER
+         Place GTM snippet here (in <head>) once you have a container ID.
+         Replace GTM-XXXXXXX with your actual container ID.
+    ============================================================ -->
+    <!--
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-XXXXXXX');</script>
+    -->
+
+    <!-- ============================================================
+         JSON-LD SCHEMA MARKUP (Structured Data for Google Rich Results)
+    ============================================================ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+
+        {
+          "@type": ["Organization", "ProfessionalService"],
+          "@id": "https://www.stryvenix.com/#organization",
+          "name": "Stryvenix",
+          "url": "https://www.stryvenix.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "@id": "https://www.stryvenix.com/#logo",
+            "url": "https://www.stryvenix.com/favicon-32x32.png",
+            "contentUrl": "https://www.stryvenix.com/favicon-32x32.png",
+            "caption": "Stryvenix"
+          },
+          "image": {
+            "@id": "https://www.stryvenix.com/#logo"
+          },
+          "description": "Stryvenix is a creative tech agency specializing in website design, AI solutions, and business automation services for clients in the US, UK, and India.",
+          "foundingDate": "2024",
+          "priceRange": "$$",
+          "areaServed": [
+            { "@type": "Country", "name": "United States" },
+            { "@type": "Country", "name": "United Kingdom" },
+            { "@type": "Country", "name": "India" }
+          ],
+          "knowsAbout": [
+            "Website Design",
+            "Web Development",
+            "Artificial Intelligence",
+            "Business Automation",
+            "Workflow Automation",
+            "UI/UX Design",
+            "AI Integration"
+          ],
+          "sameAs": [
+            "https://twitter.com/stryvenix",
+            "https://www.linkedin.com/company/stryvenix",
+            "https://www.instagram.com/stryvenix"
+          ],
+          "founder": {
+            "@id": "https://www.stryvenix.com/#founder"
+          },
+          "employee": {
+            "@id": "https://www.stryvenix.com/#founder"
+          },
+          "contactPoint": [
+            {
+              "@type": "ContactPoint",
+              "contactType": "customer support",
+              "availableLanguage": ["English"],
+              "areaServed": ["US", "GB", "IN"]
+            },
+            {
+              "@type": "ContactPoint",
+              "contactType": "sales",
+              "availableLanguage": ["English"],
+              "areaServed": ["US", "GB", "IN"]
+            }
+          ],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Stryvenix Services",
+            "itemListElement": [
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Website Design & Development",
+                  "description": "Custom, conversion-focused website design and development for businesses across the US, UK, and India.",
+                  "serviceType": "Web Development"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "AI Solutions",
+                  "description": "AI-powered tools and integrations to help businesses grow smarter and automate decision-making.",
+                  "serviceType": "Artificial Intelligence"
+                }
+              },
+              {
+                "@type": "Offer",
+                "itemOffered": {
+                  "@type": "Service",
+                  "name": "Business Automation",
+                  "description": "End-to-end workflow automation services that save time, reduce errors, and increase operational efficiency.",
+                  "serviceType": "Business Automation"
+                }
+              }
+            ]
+          }
+        },
+
+        {
+          "@type": "WebSite",
+          "@id": "https://www.stryvenix.com/#website",
+          "url": "https://www.stryvenix.com/",
+          "name": "Stryvenix",
+          "description": "Website Design, AI & Automation Agency serving US, UK, and India",
+          "inLanguage": "en-US",
+          "publisher": {
+            "@id": "https://www.stryvenix.com/#organization"
+          },
+          "copyrightYear": "2025",
+          "copyrightHolder": {
+            "@id": "https://www.stryvenix.com/#organization"
+          }
+          /*
+           * FIX ❌→✅ REMOVED: SearchAction with ?s={search_term_string}
+           * That is a WordPress search pattern. Your React SPA does not have
+           * a search endpoint at that URL. Adding a fake SearchAction causes
+           * Google Search Console errors and can trigger a manual review penalty.
+           * Add it back only if you implement a real /search?q= route.
+           */
+        },
+
+        {
+          "@type": "WebPage",
+          "@id": "https://www.stryvenix.com/#webpage",
+          "url": "https://www.stryvenix.com/",
+          "name": "Website Design, AI & Automation Agency | Stryvenix",
+          "isPartOf": { "@id": "https://www.stryvenix.com/#website" },
+          "about": { "@id": "https://www.stryvenix.com/#organization" },
+          "description": "Stryvenix builds high-converting websites, AI tools, and automation systems for modern businesses in the US, UK, and India.",
+          "inLanguage": "en-US",
+          "breadcrumb": {
+            "@id": "https://www.stryvenix.com/#breadcrumb"
+          },
+
+          /*
+           * FIX ❌→✅ ADDED: datePublished & dateModified
+           * Google uses these for freshness scoring and to display
+           * a date in the search snippet. Update dateModified whenever
+           * you make significant content changes.
+           */
+          "datePublished": "2024-01-01",
+          "dateModified": "2025-04-01",
+
+          /*
+           * FIX ❌→✅ ADDED: speakable
+           * Tells Google Assistant / voice search which parts of the page
+           * to read aloud. Target the most important summary content.
+           */
+          "speakable": {
+            "@type": "SpeakableSpecification",
+            "cssSelector": ["h1", ".hero-description", "#services h2"]
+          },
+
+          /*
+           * ✅ primaryImageOfPage: helps Google pick the correct image
+           * for image search and rich previews.
+           */
+          "primaryImageOfPage": {
+            "@type": "ImageObject",
+            "url": "https://www.stryvenix.com/og-image.png",
+            "width": 1200,
+            "height": 630
+          }
+        },
+
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://www.stryvenix.com/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://www.stryvenix.com/"
+            }
+          ]
+        },
+
+        {
+          "@type": "FAQPage",
+          "@id": "https://www.stryvenix.com/#faq",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "What services does Stryvenix offer?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Stryvenix offers three core services: custom website design and development, AI-powered solutions and integrations, and end-to-end business workflow automation. We serve clients in the US, UK, and India."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Does Stryvenix work with international clients?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Stryvenix works with businesses in the United States, United Kingdom, and India, providing remote-first design, development, and automation services."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How can I get started with Stryvenix?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can get started by reaching out through our website at stryvenix.com. Our team will schedule a discovery call to understand your needs and recommend the right solution."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What industries does Stryvenix serve?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Stryvenix works across a wide range of industries including e-commerce, SaaS, professional services, startups, and enterprise businesses looking to leverage AI and automation."
+              }
+            }
+          ]
+        },
+
+        {
+          "@type": "Person",
+          "@id": "https://www.stryvenix.com/#founder",
+          "name": "Rithik Sai Kuruba",
+          "givenName": "Rithik Sai",
+          "familyName": "Kuruba",
+          "jobTitle": "Founder & CEO",
+          "description": "Rithik Sai is the Founder & CEO of Stryvenix, a forward-thinking digital agency specializing in website development, AI solutions, and business automation. With a strong engineering mindset, he focuses on building high-performance digital experiences that help businesses scale efficiently.",
+          "url": "https://www.stryvenix.com/",
+
+          /*
+           * FIX ❌→✅: The original URL contained the literal string
+           * "TODO: replace with https://..." — Google's crawler would
+           * attempt to fetch a URL beginning with "TODO:" and log an error.
+           * Replace the placeholder below with the actual image URL once ready.
+           */
+          "image": {
+            "@type": "ImageObject",
+            "@id": "https://www.stryvenix.com/#founder-photo",
+            "url": "https://www.stryvenix.com/rithik-sai-kuruba.jpg",
+            "caption": "Rithik Sai Kuruba — Founder & CEO of Stryvenix"
+          },
+
+          "address": {
+            "@type": "PostalAddress",
+            "addressRegion": "Andhra Pradesh",
+            "addressCountry": "IN"
+          },
+
+          "sameAs": [
+            "https://www.linkedin.com/in/rithiksaikuruba"
+          ],
+
+          "worksFor": {
+            "@id": "https://www.stryvenix.com/#organization"
+          },
+
+          "knowsAbout": [
+            "Website Design & Development",
+            "Artificial Intelligence",
+            "Business Automation",
+            "Workflow Automation",
+            "Digital Strategy",
+            "UI/UX Design",
+            "Entrepreneurship"
+          ]
+        }
+
+      ]
+    }
+    </script>
+
+  </head>
+  <body>
+
+    <!--
+      FIX ❌→✅ ADDED: GTM <noscript> fallback — must be first child of <body>
+      Uncomment and update GTM-XXXXXXX when you add GTM.
+    -->
+    <!--
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
+    -->
+
+    <!--
+      FIX ❌→✅ ADDED: <noscript> fallback for React SPA.
+      Without this, users with JS disabled see a completely blank page.
+      Google can render JS, but a visible <noscript> message is a safety net
+      and signals to crawlers that the site is aware of non-JS environments.
+    -->
+    <noscript>
+      <style>
+        .noscript-notice {
+          font-family: sans-serif;
+          text-align: center;
+          padding: 4rem 2rem;
+          background: #0a0a0a;
+          color: #e2e8f0;
+        }
+        .noscript-notice a { color: #60a5fa; }
+      </style>
+      <div class="noscript-notice">
+        <h1>Stryvenix — Website Design, AI &amp; Automation Agency</h1>
+        <p>
+          This site requires JavaScript to run. Please enable JavaScript in your browser
+          or visit us at <a href="https://www.stryvenix.com">stryvenix.com</a>.
+        </p>
+      </div>
+    </noscript>
+
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- HOMEPAGE -->
+  <url>
+    <loc>https://www.stryvenix.com/</loc>
+
+    <image:image>
+      <image:loc>https://www.stryvenix.com/images/og/og-image.png</image:loc>
+      <image:title>Stryvenix — Website Design, AI & Automation Agency</image:title>
+      <image:caption>Digital agency offering web design, AI solutions, and automation services.</image:caption>
+      <image:geo_location>Hyderabad, India</image:geo_location>
+    </image:image>
+
+    <image:image>
+      <image:loc>https://www.stryvenix.com/images/branding/logo.png</image:loc>
+      <image:title>Stryvenix Logo</image:title>
+      <image:caption>Official logo of Stryvenix agency.</image:caption>
+    </image:image>
+
+    <image:image>
+      <image:loc>https://www.stryvenix.com/images/hero/hero-banner.png</image:loc>
+      <image:title>Stryvenix Hero Banner</image:title>
+      <image:caption>Hero banner showcasing web, AI, and automation services.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- ABOUT -->
+  <url>
+    <loc>https://www.stryvenix.com/about</loc>
+
+    <image:image>
+      <image:loc>https://www.stryvenix.com/images/about/rithik-sai.jpg</image:loc>
+      <image:title>Rithik Sai — Founder of Stryvenix</image:title>
+      <image:caption>Founder and CEO of Stryvenix digital agency.</image:caption>
+      <image:geo_location>Hyderabad, India</image:geo_location>
+    </image:image>
+  </url>
+
+  <!-- SERVICES: WEB DESIGN -->
+  <url>
+    <loc>https://www.stryvenix.com/services/web-design</loc>
+
+    <image:image>
+      <image:loc>https://www.stryvenix.com/images/services/web-design/web-design.png</image:loc>
+      <image:title>Website Design Services</image:title>
+      <image:caption>Custom website design and development services.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- SERVICES: AI -->
+  <url>
+    <loc>https://www.stryvenix.com/services/ai</loc>
+
+    <image:image>
+      <image:loc>https://www.stryvenix.com/images/services/ai/ai-solutions.png</image:loc>
+      <image:title>AI Solutions</image:title>
+      <image:caption>AI-powered business solutions and automation tools.</image:caption>
+    </image:image>
+  </url>
+
+  <!-- SERVICES: AUTOMATION -->
+  <url>
+    <loc>https://www.stryvenix.com/services/automation</loc>
+
+    <image:image>
+      <image:loc>https://www.stryvenix.com/images/services/automation/automation.png</image:loc>
+      <image:title>Business Automation</image:title>
+      <image:caption>Workflow automation systems to improve efficiency.</image:caption>
+    </image:image>
+  </url>
+
+</urlset>
