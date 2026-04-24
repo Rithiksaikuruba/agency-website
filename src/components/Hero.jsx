@@ -1371,7 +1371,7 @@ export default function Hero() {
                 automation systems that launch{' '}
                 <abbr title="Minimum Viable Product">MVP</abbr>s faster — trusted by{' '}
                 <strong className="font-semibold text-slate-800 dark:text-slate-200">
-                  50+ startups &amp; businesses
+                  20+ startups &amp; businesses
                 </strong>{' '}
                 across the{' '}
                 <strong className="font-semibold text-slate-800 dark:text-slate-200">
