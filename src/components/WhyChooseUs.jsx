@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, memo, useCallback, useMemo } from 'react';
 import { motion, useMotionTemplate, useMotionValue, animate, useInView, AnimatePresence } from 'framer-motion';
 import {
   DollarSign, Smartphone, TrendingUp, Shield, Headphones,
@@ -7,7 +7,7 @@ import {
 } from 'lucide-react';
 
 /* ─── 1. GLOBAL STYLES ─────────────────────────────────────────── */
-const GlobalStyles = () => (
+const GlobalStyles = memo(() => (
   <style>{`
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap');
 
@@ -64,10 +64,10 @@ const GlobalStyles = () => (
       transform-origin: 50% 50%;
     }
   `}</style>
-);
+));
 
 /* ─── 2. ANIMATED COUNTER ───────────────────────────────────────── */
-const Counter = ({ to, suffix = '', prefix = '', duration = 1.8, decimals = 0 }) => {
+const Counter = memo(({ to, suffix = '', prefix = '', duration = 1.8, decimals = 0 }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   const [display, setDisplay] = useState(0);
@@ -82,19 +82,20 @@ const Counter = ({ to, suffix = '', prefix = '', duration = 1.8, decimals = 0 })
   }, [inView, to, duration, decimals]);
   
   return <span ref={ref}>{prefix}{display}{suffix}</span>;
-};
+});
 
 /* ─── 3. ANIMATED TEXT ──────────────────────────────────────────── */
-const AnimatedText = ({ text, className, delay = 0 }) => {
-  const words = text.split(' ');
-  const container = {
+const AnimatedText = memo(({ text, className, delay = 0 }) => {
+  const words = useMemo(() => text.split(' '), [text]);
+  const container = useMemo(() => ({
     hidden: { opacity: 0 },
     visible: { opacity: 1, transition: { staggerChildren: 0.09, delayChildren: delay } },
-  };
-  const child = {
+  }), [delay]);
+  const child = useMemo(() => ({
     visible: { opacity: 1, y: 0,  transition: { type: 'spring', damping: 14, stiffness: 120 } },
     hidden:  { opacity: 0, y: 24, transition: { type: 'spring', damping: 14, stiffness: 120 } },
-  };
+  }), []);
+
   return (
     <motion.div
       style={{ overflow: 'hidden', display: 'flex', flexWrap: 'wrap' }}
@@ -107,7 +108,7 @@ const AnimatedText = ({ text, className, delay = 0 }) => {
       ))}
     </motion.div>
   );
-};
+});
 
 /* ─── 4. VARIANTS ───────────────────────────────────────────────── */
 const fadeUp = {
@@ -120,13 +121,19 @@ const stagger = {
 };
 
 /* ─── 5. SPOTLIGHT CARD ─────────────────────────────────────────── */
-const SpotlightCard = ({ children, className = '' }) => {
+const SpotlightCard = memo(({ children, className = '' }) => {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const handleMove = ({ currentTarget, clientX, clientY }) => {
+  // useCallback prevents creating a new handler function on every render
+  const handleMove = useCallback(({ currentTarget, clientX, clientY }) => {
     const { left, top } = currentTarget.getBoundingClientRect();
-    mx.set(clientX - left); my.set(clientY - top);
-  };
+    mx.set(clientX - left);
+    my.set(clientY - top);
+  }, [mx, my]);
+
+  const gradientLight = useMotionTemplate`radial-gradient(540px circle at ${mx}px ${my}px, rgba(99,102,241,0.08), transparent 80%)`;
+  const gradientDark  = useMotionTemplate`radial-gradient(540px circle at ${mx}px ${my}px, rgba(139,92,246,0.16), transparent 80%)`;
+
   return (
     <motion.div
       variants={fadeUp}
@@ -135,19 +142,19 @@ const SpotlightCard = ({ children, className = '' }) => {
     >
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10"
-        style={{ background: useMotionTemplate`radial-gradient(540px circle at ${mx}px ${my}px, rgba(99,102,241,0.08), transparent 80%)` }}
+        style={{ background: gradientLight }}
       />
       <motion.div
         className="pointer-events-none absolute -inset-px rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-10 hidden dark:block"
-        style={{ background: useMotionTemplate`radial-gradient(540px circle at ${mx}px ${my}px, rgba(139,92,246,0.16), transparent 80%)` }}
+        style={{ background: gradientDark }}
       />
       <div className="relative h-full z-20">{children}</div>
     </motion.div>
   );
-};
+});
 
 /* ─── 6. RING PROGRESS ──────────────────────────────────────────── */
-const RingProgress = ({ value, size = 56, stroke = 4, color = '#6366f1', bg = 'rgba(99,102,241,0.1)' }) => {
+const RingProgress = memo(({ value, size = 56, stroke = 4, color = '#6366f1', bg = 'rgba(99,102,241,0.1)' }) => {
   const r = (size - stroke) / 2;
   const circ = 2 * Math.PI * r;
   const ref = useRef(null);
@@ -166,10 +173,10 @@ const RingProgress = ({ value, size = 56, stroke = 4, color = '#6366f1', bg = 'r
       </svg>
     </div>
   );
-};
+});
 
 /* ─── 7. STAT PILL ──────────────────────────────────────────────── */
-const StatPill = ({ icon: Icon, value, label, color, ringColor, ringValue }) => (
+const StatPill = memo(({ icon: Icon, value, label, color, ringColor, ringValue }) => (
   <motion.div
     variants={fadeUp}
     className="flex items-center gap-3 bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] rounded-2xl px-4 py-3 shadow-sm backdrop-blur-sm"
@@ -185,7 +192,7 @@ const StatPill = ({ icon: Icon, value, label, color, ringColor, ringValue }) => 
       <div className="text-[11px] text-slate-500 dark:text-slate-400">{label}</div>
     </div>
   </motion.div>
-);
+));
 
 /* ─── 8. TICKER ─────────────────────────────────────────────────── */
 const badges = [
@@ -194,9 +201,10 @@ const badges = [
   { text: 'WCAG Compliant', symbol: '◆' }, { text: 'On-Time Delivery', symbol: '◆' },
   { text: 'Zero Hidden Fees', symbol: '◆' }, { text: 'Agile Process', symbol: '◆' },
 ];
+// Computed once at module level — never recreated
 const allBadges = [...badges, ...badges];
 
-const TickerStripe = () => (
+const TickerStripe = memo(() => (
   <div className="w-full overflow-hidden border-y border-slate-100 dark:border-white/[0.05] py-3.5 mb-20 relative">
     <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-slate-50 dark:from-[#020617] to-transparent z-10 pointer-events-none" />
     <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-slate-50 dark:from-[#020617] to-transparent z-10 pointer-events-none" />
@@ -209,10 +217,10 @@ const TickerStripe = () => (
       ))}
     </div>
   </div>
-);
+));
 
 /* ─── 9. ANIMATED CLOCK ─────────────────────────────────────────── */
-const AnimatedClock = () => {
+const AnimatedClock = memo(() => {
   const [t, setT] = useState(0);
   useEffect(() => {
     const id = setInterval(() => setT(s => (s + 1) % 720), 60);
@@ -240,17 +248,15 @@ const AnimatedClock = () => {
               x1={40 + inner * Math.cos(a)} y1={40 + inner * Math.sin(a)}
               x2={40 + 33 * Math.cos(a)} y2={40 + 33 * Math.sin(a)}
               stroke="currentColor" strokeWidth={i % 3 === 0 ? 2 : 1}
-              className={i % 3 === 0 ? "text-slate-400 dark:text-white/30" : "text-slate-200 dark:text-white/10"}
+              className={i % 3 === 0 ? 'text-slate-400 dark:text-white/30' : 'text-slate-200 dark:text-white/10'}
             />
           );
         })}
-        {/* Hour hand */}
         <line x1="40" y1="40"
           x2={40 + 14 * Math.cos((hour - 90) * Math.PI / 180)}
           y2={40 + 14 * Math.sin((hour - 90) * Math.PI / 180)}
           stroke="#6366f1" strokeWidth="3" strokeLinecap="round"
         />
-        {/* Minute hand */}
         <line x1="40" y1="40"
           x2={40 + 22 * Math.cos((min - 90) * Math.PI / 180)}
           y2={40 + 22 * Math.sin((min - 90) * Math.PI / 180)}
@@ -261,32 +267,31 @@ const AnimatedClock = () => {
       </svg>
     </div>
   );
-};
+});
 
 /* ─── 10. MINI BAR CHART ────────────────────────────────────────── */
-const MiniBarChart = () => {
-  const bars = [28, 44, 38, 60, 52, 74, 68, 88, 82, 95];
-  const colors = ['#6366f1', '#818cf8', '#a78bfa', '#c4b5fd'];
-  return (
-    <div className="flex items-end gap-1 h-16 mt-4">
-      {bars.map((h, i) => (
-        <div key={i} className="flex-1 rounded-t relative" style={{ height: '100%', background: 'rgba(99,102,241,0.06)' }}>
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 rounded-t"
-            style={{ background: `linear-gradient(to top, ${colors[i % 4]}, ${colors[(i+1) % 4]}80)` }}
-            initial={{ height: 0 }}
-            whileInView={{ height: `${h}%` }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
-          />
-        </div>
-      ))}
-    </div>
-  );
-};
+const bars = [28, 44, 38, 60, 52, 74, 68, 88, 82, 95];
+const barColors = ['#6366f1', '#818cf8', '#a78bfa', '#c4b5fd'];
+
+const MiniBarChart = memo(() => (
+  <div className="flex items-end gap-1 h-16 mt-4">
+    {bars.map((h, i) => (
+      <div key={i} className="flex-1 rounded-t relative" style={{ height: '100%', background: 'rgba(99,102,241,0.06)' }}>
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 rounded-t"
+          style={{ background: `linear-gradient(to top, ${barColors[i % 4]}, ${barColors[(i+1) % 4]}80)` }}
+          initial={{ height: 0 }}
+          whileInView={{ height: `${h}%` }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
+        />
+      </div>
+    ))}
+  </div>
+));
 
 /* ─── 11. VS COMPARISON TABLE ───────────────────────────────────── */
-const ComparisonRow = ({ label, us = true, them = false, delay = 0 }) => (
+const ComparisonRow = memo(({ label, us = true, them = false, delay = 0 }) => (
   <motion.div
     initial={{ opacity: 0, x: -12 }} whileInView={{ opacity: 1, x: 0 }}
     viewport={{ once: true }} transition={{ delay, duration: 0.4 }}
@@ -306,20 +311,19 @@ const ComparisonRow = ({ label, us = true, them = false, delay = 0 }) => (
         : <X className="w-4 h-4 text-slate-300 dark:text-slate-600" />}
     </div>
   </motion.div>
-);
+));
 
 /* ─── 13. REVIEW STARS ──────────────────────────────────────────── */
-const ReviewStars = ({ count = 5, size = 12 }) => (
+const ReviewStars = memo(({ count = 5, size = 12 }) => (
   <div className="flex gap-0.5">
     {[...Array(count)].map((_, i) => (
       <Star key={i} style={{ width: size, height: size }} className="text-amber-400 fill-amber-400" />
     ))}
   </div>
-);
+));
 
 /* ─── 14. POST-LAUNCH CARD ──────────────────────────────────────── */
 
-/* Chat sequence */
 const CHAT_SEQUENCE = [
   { id: 1, side: 'them', text: 'Just noticed our load time dropped to 0.8s 🔥', time: '2:41 PM', delay: 500 },
   { id: 2, side: 'us',   text: 'Yep — we pushed a caching update overnight.', time: '2:42 PM', delay: 2000 },
@@ -328,7 +332,6 @@ const CHAT_SEQUENCE = [
   { id: 5, side: 'resolved', delay: 6800 },
 ];
 
-/* Live activity feed events */
 const ACTIVITY_EVENTS = [
   { icon: '🚀', label: 'Deploy pushed to production',    tag: 'Deploy',   tagColor: 'bg-indigo-50 dark:bg-indigo-500/10 text-indigo-500', time: 'just now' },
   { icon: '⚡', label: 'Caching optimised — 38% faster', tag: 'Perf',     tagColor: 'bg-teal-50 dark:bg-teal-500/10 text-teal-500',    time: '4m ago' },
@@ -338,11 +341,10 @@ const ACTIVITY_EVENTS = [
   { icon: '🔄', label: 'Dependencies updated & tested',   tag: 'Update',   tagColor: 'bg-rose-50 dark:bg-rose-500/10 text-rose-500',   time: '2d ago' },
 ];
 
-/* Sparkline data (uptime %) */
 const SPARK = [99.1, 99.5, 98.9, 99.7, 99.9, 99.6, 99.8, 99.9, 99.7, 99.9];
 
 /* ── Typing bubble ── */
-const TypingBubble = () => (
+const TypingBubble = memo(() => (
   <motion.div
     initial={{ opacity: 0, y: 6, scale: 0.92 }}
     animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -362,10 +364,10 @@ const TypingBubble = () => (
       ))}
     </div>
   </motion.div>
-);
+));
 
 /* ── Chat bubble ── */
-const ChatBubble = ({ msg }) => {
+const ChatBubble = memo(({ msg }) => {
   const isUs = msg.side === 'us';
   return (
     <motion.div
@@ -398,10 +400,10 @@ const ChatBubble = ({ msg }) => {
       </div>
     </motion.div>
   );
-};
+});
 
-/* ── Animated chat widget ── */
-const AnimatedChatWidget = () => {
+/* ── Animated chat widget — isolated so it never triggers parent re-render ── */
+const AnimatedChatWidget = memo(() => {
   const [visibleMsgs, setVisibleMsgs] = useState([]);
   const [showTyping, setShowTyping] = useState(false);
   const [phase, setPhase] = useState(0);
@@ -464,7 +466,6 @@ const AnimatedChatWidget = () => {
             <span className="text-[10px] text-green-500 font-semibold">Online · replies in ~5 min</span>
           </div>
         </div>
-        {/* Unread badge */}
         <motion.div className="relative flex-shrink-0"
           initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 1.2, type: 'spring', damping: 10 }}
         >
@@ -523,10 +524,10 @@ const AnimatedChatWidget = () => {
       </div>
     </div>
   );
-};
+});
 
 /* ── Sparkline SVG ── */
-const Sparkline = () => {
+const Sparkline = memo(() => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   const min = 98.5, max = 100;
@@ -556,7 +557,6 @@ const Sparkline = () => {
           <polygon points={area} fill="url(#sparkGrad)" />
           <polyline points={pts} stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none" />
         </g>
-        {/* Live dot */}
         <motion.circle cx={w} cy={h - ((SPARK[SPARK.length-1] - min) / (max - min)) * h} r="2.5" fill="#22c55e"
           animate={{ r: [2, 4, 2], opacity: [1, 0.5, 1] }} transition={{ duration: 1.6, repeat: Infinity }}
         />
@@ -564,29 +564,25 @@ const Sparkline = () => {
       <span className="text-[10px] font-extrabold text-green-500">99.9%</span>
     </div>
   );
-};
+});
 
-/* ── Live activity feed ── */
-const LiveFeed = () => {
-  // Add initial unique IDs
-  const [events, setEvents] = useState(() => 
+/* ── Live activity feed — isolated to prevent polluting parent renders ── */
+const LiveFeed = memo(() => {
+  const [events, setEvents] = useState(() =>
     ACTIVITY_EVENTS.map((ev, i) => ({ ...ev, id: `init-${i}` }))
   );
 
-  /* FIX 2: Removed stale closure mapping inside useEffect. 
-     Removed `tick` from dependency array so it doesn't endlessly recreate the interval. */
   useEffect(() => {
     let tickCount = 0;
     const id = setInterval(() => {
       tickCount++;
       setEvents(prev => {
         const next = [...prev];
-        next.pop(); // Remove the oldest
-        // Add new item with a guaranteed unique ID
-        const newItem = { 
-          ...ACTIVITY_EVENTS[tickCount % ACTIVITY_EVENTS.length], 
+        next.pop();
+        const newItem = {
+          ...ACTIVITY_EVENTS[tickCount % ACTIVITY_EVENTS.length],
           time: 'just now',
-          id: `live-${tickCount}`
+          id: `live-${tickCount}`,
         };
         return [newItem, ...next];
       });
@@ -596,7 +592,6 @@ const LiveFeed = () => {
 
   return (
     <div className="bg-white dark:bg-slate-800/90 border border-slate-200 dark:border-white/[0.09] rounded-2xl shadow-xl shadow-slate-200/60 dark:shadow-black/40 overflow-hidden w-full">
-      {/* Header */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100 dark:border-white/[0.06]">
         <div className="flex items-center gap-2">
           <motion.span className="w-2 h-2 rounded-full bg-green-500 inline-block"
@@ -610,11 +605,10 @@ const LiveFeed = () => {
         </span>
       </div>
 
-      {/* Events */}
       <div className="divide-y divide-slate-50 dark:divide-white/[0.04]">
         <AnimatePresence mode="popLayout">
           {events.slice(0, 3).map((ev, i) => (
-            <motion.div key={ev.id} // Added robust unique ID tracking here
+            <motion.div key={ev.id}
               initial={{ opacity: 0, x: -10, backgroundColor: 'rgba(99,102,241,0.06)' }}
               animate={{ opacity: 1, x: 0, backgroundColor: 'rgba(99,102,241,0)' }}
               exit={{ opacity: 0, height: 0 }}
@@ -636,7 +630,6 @@ const LiveFeed = () => {
         </AnimatePresence>
       </div>
 
-      {/* Uptime footer */}
       <div className="px-4 py-2.5 border-t border-slate-100 dark:border-white/[0.06] flex items-center justify-between">
         <div>
           <p className="text-[9.5px] font-bold text-slate-400 uppercase tracking-wider">Uptime (30d)</p>
@@ -649,11 +642,10 @@ const LiveFeed = () => {
       </div>
     </div>
   );
-};
+});
 
-const PostLaunchCard = () => (
+const PostLaunchCard = memo(() => (
   <SpotlightCard className="md:col-span-2 lg:col-span-3 rounded-[2rem] p-6 sm:p-8 relative overflow-hidden">
-    {/* Background */}
     <div className="absolute inset-0 bg-gradient-to-br from-white via-pink-50/15 to-indigo-50/10 dark:from-slate-900 dark:via-rose-900/[0.05] dark:to-indigo-900/[0.05] pointer-events-none" />
     <motion.div className="absolute -right-32 -top-32 w-[500px] h-[500px] rounded-full blur-[100px] pointer-events-none opacity-60"
       style={{ background: 'radial-gradient(circle, rgba(244,63,94,0.07), transparent 70%)' }}
@@ -662,9 +654,7 @@ const PostLaunchCard = () => (
 
     <div className="relative z-10 flex flex-col lg:flex-row gap-8">
 
-      {/* ── COL 1: Copy + KPIs + checklist ── */}
       <div className="flex-1 min-w-0">
-        {/* Icon + badge row */}
         <div className="flex items-center gap-3 mb-4">
           <div className="w-11 h-11 bg-pink-50 dark:bg-pink-500/10 rounded-2xl flex items-center justify-center text-pink-600 dark:text-pink-400 border border-pink-100 dark:border-pink-500/20 flex-shrink-0">
             <Headphones className="w-5 h-5" />
@@ -689,7 +679,6 @@ const PostLaunchCard = () => (
           <span className="font-extrabold text-slate-800 dark:text-white"> monitoring, fixes, and updates</span>.
         </p>
 
-        {/* KPI row — horizontal, flexible */}
         <div className="flex flex-wrap gap-2.5 mb-5">
           {[
             { value: <Counter to={6} suffix="mo" />,  label: 'Support',   color: 'text-pink-500',  ring: '#f43f5e', bg: 'bg-pink-50 dark:bg-pink-500/10',   val: 100 },
@@ -711,7 +700,6 @@ const PostLaunchCard = () => (
           ))}
         </div>
 
-        {/* Feature checklist — compact */}
         <div className="space-y-2 mb-5">
           {[
             { text: 'Real-time uptime & performance monitoring', delay: 0.1 },
@@ -731,7 +719,6 @@ const PostLaunchCard = () => (
           ))}
         </div>
 
-        {/* Testimonial — compact single line */}
         <motion.div
           initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }} transition={{ delay: 0.4 }}
@@ -748,7 +735,6 @@ const PostLaunchCard = () => (
         </motion.div>
       </div>
 
-      {/* ── COL 2: Live Feed ── */}
       <motion.div className="flex-shrink-0 w-full lg:w-[268px]"
         initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }} transition={{ delay: 0.15 }}
@@ -756,7 +742,6 @@ const PostLaunchCard = () => (
         <LiveFeed />
       </motion.div>
 
-      {/* ── COL 3: Chat ── */}
       <motion.div className="flex-shrink-0 w-full lg:w-[268px]"
         initial={{ opacity: 0, y: 10 }} whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }} transition={{ delay: 0.28 }}
@@ -766,12 +751,17 @@ const PostLaunchCard = () => (
 
     </div>
   </SpotlightCard>
-);
+));
 
-// Moved outside the component so it doesn't get recreated on every render and trigger ESLint warnings
+/* ─── 15. TYPED CODE BLOCK — isolated component ────────────────────
+   KEY OPTIMIZATION: This component owns its own 75ms interval state.
+   Previously this lived in the WhyChooseUs parent, causing the ENTIRE
+   tree (all bento cards, counters, animations) to re-render every 75ms.
+   Now only this tiny component re-renders on each tick.
+─────────────────────────────────────────────────────────────────── */
 const CODE_STRING = `const project = {\n  pricing: "transparent",\n  hidden_fees: 0,\n  surprises: null,\n  trust: Infinity\n};`;
 
-export default function WhyChooseUs() {
+const TypedCodeBlock = memo(() => {
   const [typedCode, setTypedCode] = useState('');
 
   useEffect(() => {
@@ -785,6 +775,41 @@ export default function WhyChooseUs() {
     return () => clearInterval(id);
   }, []);
 
+  return (
+    <div className="hidden lg:block absolute right-4 top-6 bottom-6 w-[42%] overflow-hidden rounded-xl pointer-events-none select-none">
+      <div className="absolute inset-0 bg-gradient-to-l from-slate-50/0 dark:from-[#0B1121]/0 to-slate-50 dark:to-[#0B1121] z-10" />
+      <div className="p-4 bg-slate-900 dark:bg-slate-950 rounded-xl h-full border border-white/10">
+        <div className="flex gap-1.5 mb-3">
+          {['#ff5f57','#ffbd2e','#28ca42'].map(c => <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />)}
+        </div>
+        <div className="text-[11px] leading-6 font-mono">
+          <span className="text-purple-400">const </span>
+          <span className="text-blue-300">project</span>
+          <span className="text-white"> = {'{'}</span>
+          {typedCode.includes('\n') && (
+            <>
+              {typedCode.split('\n').slice(1).map((line, i) => (
+                <div key={i} className="pl-3">
+                  {line.includes('pricing')     && <><span className="text-teal-300">pricing</span><span className="text-white">: </span><span className="text-amber-300">"transparent"</span><span className="text-slate-400">,</span></>}
+                  {line.includes('hidden_fees') && <><span className="text-teal-300">hidden_fees</span><span className="text-white">: </span><span className="text-orange-400">0</span><span className="text-slate-400">,</span></>}
+                  {line.includes('surprises')   && <><span className="text-teal-300">surprises</span><span className="text-white">: </span><span className="text-slate-400">null</span><span className="text-slate-400">,</span></>}
+                  {line.includes('trust')       && <><span className="text-teal-300">trust</span><span className="text-white">: </span><span className="text-purple-300">Infinity</span></>}
+                  {line.includes('}')           && <span className="text-white">{'}'}</span>}
+                  {line.includes('}')           && <span className="text-slate-400">;</span>}
+                </div>
+              ))}
+            </>
+          )}
+          <span className="animate-pulse text-indigo-400">▌</span>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+/* ─── 16. MAIN EXPORT ───────────────────────────────────────────── */
+export default function WhyChooseUs() {
+  // typedCode state is now gone from this component entirely
   return (
     <section className="relative py-24 sm:py-32 px-4 sm:px-6 overflow-hidden bg-slate-50 dark:bg-[#020617] transition-colors duration-500" id="why">
       <GlobalStyles />
@@ -815,8 +840,8 @@ export default function WhyChooseUs() {
             className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-white dark:bg-white/[0.04] border border-slate-200 dark:border-white/[0.08] shadow-sm mb-8 backdrop-blur-sm"
           >
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500" />
             </span>
             <span className="text-[11px] font-bold uppercase tracking-[0.14em] text-slate-600 dark:text-slate-300">The Advantage</span>
           </motion.div>
@@ -837,7 +862,6 @@ export default function WhyChooseUs() {
               </motion.p>
             </div>
 
-            {/* Side quote */}
             <motion.div
               initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }} transition={{ delay: 0.5 }}
@@ -880,37 +904,9 @@ export default function WhyChooseUs() {
 
           {/* ── CARD 1: CLEAR PRICING (wide) ── */}
           <SpotlightCard className="md:col-span-2 rounded-[2rem] p-6 sm:p-10 flex flex-col justify-center min-h-[300px] relative">
-            {/* Decorative code bg (Hidden on small screens to prevent overlap) */}
-            <div className="hidden lg:block absolute right-4 top-6 bottom-6 w-[42%] overflow-hidden rounded-xl pointer-events-none select-none">
-              <div className="absolute inset-0 bg-gradient-to-l from-slate-50/0 dark:from-[#0B1121]/0 to-slate-50 dark:to-[#0B1121] z-10" />
-              <div className="p-4 bg-slate-900 dark:bg-slate-950 rounded-xl h-full border border-white/10">
-                <div className="flex gap-1.5 mb-3">
-                  {['#ff5f57','#ffbd2e','#28ca42'].map(c => <div key={c} className="w-2.5 h-2.5 rounded-full" style={{ background: c }} />)}
-                </div>
-                <div className="text-[11px] leading-6 font-mono">
-                  <span className="text-purple-400">const </span>
-                  <span className="text-blue-300">project</span>
-                  <span className="text-white"> = {'{'}</span>
-                  {typedCode.includes('\n') && (
-                    <>
-                      {typedCode.split('\n').slice(1).map((line, i) => (
-                        <div key={i} className="pl-3">
-                          {line.includes('pricing') && <><span className="text-teal-300">pricing</span><span className="text-white">: </span><span className="text-amber-300">"transparent"</span><span className="text-slate-400">,</span></>}
-                          {line.includes('hidden_fees') && <><span className="text-teal-300">hidden_fees</span><span className="text-white">: </span><span className="text-orange-400">0</span><span className="text-slate-400">,</span></>}
-                          {line.includes('surprises') && <><span className="text-teal-300">surprises</span><span className="text-white">: </span><span className="text-slate-400">null</span><span className="text-slate-400">,</span></>}
-                          {line.includes('trust') && <><span className="text-teal-300">trust</span><span className="text-white">: </span><span className="text-purple-300">Infinity</span></>}
-                          {line.includes('}') && <span className="text-white">{'}'}</span>}
-                          {line.includes('}') && <span className="text-slate-400">;</span>}
-                        </div>
-                      ))}
-                    </>
-                  )}
-                  <span className="animate-pulse text-indigo-400">▌</span>
-                </div>
-              </div>
-            </div>
+            {/* TypedCodeBlock is now its own isolated component — no more full-tree re-renders */}
+            <TypedCodeBlock />
 
-            {/* Floating badge (Hidden on small screens) */}
             <motion.div
               className="hidden lg:flex float-badge absolute top-8 right-[calc(42%-16px)] bg-white dark:bg-slate-800 border border-indigo-200 dark:border-indigo-500/30 shadow-lg shadow-indigo-100/40 dark:shadow-indigo-900/30 rounded-2xl px-4 py-2.5 items-center gap-2.5 z-10"
             >
@@ -973,12 +969,10 @@ export default function WhyChooseUs() {
               </div>
             </div>
 
-            {/* Phone mockup */}
             <div className="relative w-[85%] mx-auto mt-6">
               <div className="w-full bg-slate-900 rounded-t-[28px] border-t-[10px] border-x-[10px] border-slate-800 dark:border-slate-700 shadow-2xl shadow-indigo-900/20 overflow-hidden">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 h-5 w-[60px] bg-black rounded-b-2xl z-20" />
                 <div className="w-full bg-slate-50 dark:bg-[#020617] pt-7 p-3 space-y-2.5">
-                  {/* Status bar */}
                   <div className="flex justify-between items-center px-1 mb-1">
                     <span className="text-[8px] font-bold text-slate-400">9:41</span>
                     <div className="flex gap-1">
@@ -1020,7 +1014,6 @@ export default function WhyChooseUs() {
                       <span className="text-[9px] font-bold text-white">Get Started</span>
                     </motion.div>
                   </div>
-                  {/* Nav bar */}
                   <div className="flex justify-around pt-2 pb-1">
                     {[...Array(4)].map((_, i) => (
                       <div key={i} className={`h-1 rounded-full ${i === 0 ? 'w-8 bg-indigo-500' : 'w-4 bg-slate-200 dark:bg-slate-700'}`} />
@@ -1055,7 +1048,7 @@ export default function WhyChooseUs() {
             </div>
           </SpotlightCard>
 
-          {/* ── CARD 3b: FAST DELIVERY (beside Built to Scale) ── */}
+          {/* ── CARD 3b: FAST DELIVERY ── */}
           <SpotlightCard className="md:col-span-1 rounded-[2rem] p-6 sm:p-8 relative overflow-hidden">
             <div className="relative z-10">
               <div className="flex items-start justify-between mb-5">
@@ -1095,7 +1088,6 @@ export default function WhyChooseUs() {
                 </div>
               </div>
 
-              {/* Table header */}
               <div className="flex items-center gap-4 mb-2 px-3">
                 <span className="flex-1 text-[10px] font-bold text-slate-400 uppercase tracking-wider">Feature</span>
                 <div className="w-20 text-center">
@@ -1106,12 +1098,12 @@ export default function WhyChooseUs() {
                 </div>
               </div>
               <div className="space-y-0.5">
-                <ComparisonRow label="Fixed-price contracts"     us={true}  them={false} delay={0.1} />
+                <ComparisonRow label="Fixed-price contracts"       us={true}  them={false} delay={0.1} />
                 <ComparisonRow label="6-month post-launch support" us={true}  them={false} delay={0.15} />
-                <ComparisonRow label="Mobile-first approach"    us={true}  them={true}  delay={0.2} />
-                <ComparisonRow label="Dedicated project manager" us={true}  them={false} delay={0.25} />
-                <ComparisonRow label="WCAG 2.2 compliance"      us={true}  them={false} delay={0.3} />
-                <ComparisonRow label="Weekly progress updates"  us={true}  them={false} delay={0.35} />
+                <ComparisonRow label="Mobile-first approach"       us={true}  them={true}  delay={0.2} />
+                <ComparisonRow label="Dedicated project manager"   us={true}  them={false} delay={0.25} />
+                <ComparisonRow label="WCAG 2.2 compliance"         us={true}  them={false} delay={0.3} />
+                <ComparisonRow label="Weekly progress updates"     us={true}  them={false} delay={0.35} />
               </div>
             </div>
           </SpotlightCard>
@@ -1137,7 +1129,6 @@ export default function WhyChooseUs() {
                   <span key={label} className={`text-[10px] font-bold px-3 py-1.5 rounded-full border ${color}`}>{label}</span>
                 ))}
               </div>
-              {/* Shield glow decoration */}
               <motion.div
                 className="absolute bottom-4 right-4 w-20 h-20 opacity-[0.04] dark:opacity-[0.07]"
                 animate={{ scale: [1, 1.1, 1], rotate: [0, 5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
@@ -1147,7 +1138,7 @@ export default function WhyChooseUs() {
             </div>
           </SpotlightCard>
 
-          {/* ── CARD 7: POST-LAUNCH SUPPORT (full width) ── */}
+          {/* ── POST-LAUNCH SUPPORT (full width) ── */}
           <PostLaunchCard />
 
         </motion.div>
