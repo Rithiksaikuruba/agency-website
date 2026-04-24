@@ -3,10 +3,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Phone, Mail, MapPin, MessageSquare,
   Github, Twitter, Linkedin, CheckCircle2,
-  Calendar, Send, ArrowUpRight, Sparkles, Clock
+  Calendar, Send, ArrowUpRight, Clock
 } from 'lucide-react';
 
 import stryvenixLogo from '../assets/Stryvenix-Transparent-Logo1.png';
+
+/* ─────────────────────────────────────────────────
+   IMPORTANT – Web3Forms setup (free, instant, no CORS)
+   1. Go to  https://web3forms.com
+   2. Enter  contact.stryvenix@gmail.com  → click "Create Access Key"
+   3. Copy the key and paste it below
+   ───────────────────────────────────────────────── */
+const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY'; // ← paste your key here
 
 /* --- GLOBAL STYLES --- */
 const GlobalStyles = () => (
@@ -202,73 +210,69 @@ export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
   const [sending, setSending] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleChange = (e) => setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    setError('');
+    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   setSending(true);
-  //   await new Promise(r => setTimeout(r, 1600));
-  //   setSending(false);
-  //   setSent(true);
-  // };
+  /* ── FIXED SUBMIT using Web3Forms ── */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
 
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-//   setSending(true);
-
-//   const formData = new FormData();
-//   formData.append("name", form.name);
-//   formData.append("email", form.email);
-//   formData.append("message", form.message);
-
-//   await fetch("https://formsubmit.co/contact.stryvenix@gmail.com", {
-//     method: "POST",
-//     body: formData
-//   });
-
-//   setSending(false);
-//   setSent(true);
-// };
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setSending(true);
-
-  try {
-    const response = await fetch("https://formsubmit.co/ajax/contact.stryvenix@gmail.com", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-      },
-      body: JSON.stringify({
-        name: form.name,
-        email: form.email,
-        message: form.message,
-        _captcha: "false",
-      }),
-    });
-
-    const result = await response.json();
-
-    if (result.success === "true" || result.success === true) {
-      setSent(true);
-    } else {
-      alert("Something went wrong. Please try again.");
+    // Basic validation
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setError('Please fill in all fields before sending.');
+      return;
     }
-  } catch (err) {
-    console.error("Form error:", err);
-    alert("Failed to send. Please check your connection.");
-  } finally {
-    setSending(false);
-  }
-};
 
-  const reset = () => { setSent(false); setForm({ name: '', email: '', message: '' }); };
+    setSending(true);
+
+    try {
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_ACCESS_KEY,
+          name: form.name.trim(),
+          email: form.email.trim(),
+          message: form.message.trim(),
+          subject: `New contact from ${form.name.trim()} — Stryvenix`,
+          from_name: 'Stryvenix Contact Form',
+          // Honeypot anti-spam field (leave empty)
+          botcheck: '',
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setSent(true);
+      } else {
+        setError(result.message || 'Something went wrong. Please try again.');
+      }
+    } catch (err) {
+      console.error('Form submit error:', err);
+      setError('Network error — please check your connection and try again.');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  const reset = () => {
+    setSent(false);
+    setError('');
+    setForm({ name: '', email: '', message: '' });
+  };
 
   const socials = [
-    { Icon: Github, href: '#', label: 'GitHub' },
-    { Icon: Twitter, href: '#', label: 'Twitter' },
+    { Icon: Github,   href: '#', label: 'GitHub'   },
+    { Icon: Twitter,  href: '#', label: 'Twitter'  },
     { Icon: Linkedin, href: '#', label: 'LinkedIn' },
   ];
 
@@ -341,13 +345,10 @@ const handleSubmit = async (e) => {
 
             <div>
               <div className="flex items-center mb-8">
-                {/* Added w-48 md:w-56 to make it much bigger.
-                  Added mix-blend-multiply to remove the solid white background via CSS blending! 
-                */}
-                <img 
-                  src={stryvenixLogo} 
-                  alt="Stryvenix Logo" 
-                  className="w-48 md:w-56 h-auto object-contain mix-blend-multiply dark:mix-blend-normal" 
+                <img
+                  src={stryvenixLogo}
+                  alt="Stryvenix Logo"
+                  className="w-48 md:w-56 h-auto object-contain mix-blend-multiply dark:mix-blend-normal"
                 />
               </div>
 
@@ -357,10 +358,10 @@ const handleSubmit = async (e) => {
               </p>
 
               <div className="space-y-1">
-                <ContactRow delay={0.1} icon={Phone}  title="Phone"    value="+91 9550192069"          href="tel:+919550192069" badge="Direct" />
-                <ContactRow delay={0.2} icon={Mail}   title="Email"    value="contact.stryvenix@gmail.com" href="mailto:contact.stryvenix@gmail.com" />
-                <ContactRow delay={0.3} icon={MapPin} title="Location" value="Working remotely worldwide" />
-                <ContactRow delay={0.4} icon={Clock}  title="Response" value="Within 24 hours" badge="Fast" />
+                <ContactRow delay={0.1} icon={Phone}  title="Phone"    value="+91 9550192069"               href="tel:+919550192069"                    badge="Direct" />
+                <ContactRow delay={0.2} icon={Mail}   title="Email"    value="contact.stryvenix@gmail.com"  href="mailto:contact.stryvenix@gmail.com"   />
+                <ContactRow delay={0.3} icon={MapPin} title="Location" value="Working remotely worldwide"   />
+                <ContactRow delay={0.4} icon={Clock}  title="Response" value="Within 24 hours"              badge="Fast" />
               </div>
             </div>
 
@@ -390,9 +391,7 @@ const handleSubmit = async (e) => {
             <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.04] via-transparent to-blue-500/[0.04] pointer-events-none rounded-[2rem]" />
 
             <AnimatePresence mode="wait">
-              {sent ? (
-                <SuccessOverlay key="success" onReset={reset} />
-              ) : null}
+              {sent && <SuccessOverlay key="success" onReset={reset} />}
             </AnimatePresence>
 
             <div className="relative z-10">
@@ -408,11 +407,26 @@ const handleSubmit = async (e) => {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <FloatInput label="Your name" name="name" value={form.name} onChange={handleChange} />
-                  <FloatInput label="Email address" type="email" name="email" value={form.email} onChange={handleChange} />
+                  <FloatInput label="Your name"      name="name"    value={form.name}    onChange={handleChange} />
+                  <FloatInput label="Email address"  type="email"   name="email"   value={form.email}   onChange={handleChange} />
                 </div>
 
                 <FloatTextarea label="Tell us about your project..." name="message" value={form.message} onChange={handleChange} />
+
+                {/* Inline error message */}
+                <AnimatePresence>
+                  {error && (
+                    <motion.p
+                      key="error"
+                      initial={{ opacity: 0, y: -6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -6 }}
+                      className="text-sm font-semibold text-red-500 dark:text-red-400 flex items-center gap-1.5"
+                    >
+                      <span>⚠</span> {error}
+                    </motion.p>
+                  )}
+                </AnimatePresence>
 
                 {/* Feature pills */}
                 <div className="flex flex-wrap gap-2 pt-1">
@@ -465,7 +479,7 @@ const handleSubmit = async (e) => {
               <motion.button
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.985 }}
-               onClick={() => window.open('https://cal.com/stryvenix/30min', '_blank', 'noopener,noreferrer')}
+                onClick={() => window.open('https://cal.com/stryvenix/30min', '_blank', 'noopener,noreferrer')}
                 className="w-full flex items-center justify-between px-6 py-4 rounded-xl border-2 border-dashed border-slate-200 dark:border-white/10 hover:border-indigo-400 dark:hover:border-indigo-500 hover:bg-indigo-50/50 dark:hover:bg-indigo-500/5 transition-all duration-300 group"
               >
                 <div className="flex items-center gap-3">
