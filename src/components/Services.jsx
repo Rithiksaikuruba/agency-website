@@ -49,7 +49,7 @@ const projectsData = [
   description: "Aesop is a cult Australian luxury skincare brand renowned for its apothecary-inspired stores and strikingly minimal digital presence. Their website blends dark typography, editorial photography, and a refined product discovery experience.",
   alt: "Aesop luxury skincare website — minimalist editorial photography with apothecary dark aesthetic",
   year: "2025",
-  img: "https://images.unsplash.com/photo-1570194065650-d99fb4b38e87?q=80&w=2670&auto=format&fit=crop",
+  img: "https://images.unsplash.com/photo-1556228578-8c89e6adf883?q=80&w=2670&auto=format&fit=crop",
   url: "https://www.aesop.com",
   id: "02"
   },
