@@ -1463,7 +1463,7 @@ export default function Hero() {
                   <p className="text-sm sm:text-base font-medium text-slate-600 dark:text-slate-400 mt-1.5">
                     Trusted by{' '}
                     <strong className="text-slate-900 dark:text-white font-bold">
-                      50+ startups &amp; founders
+                      20+ startups &amp; founders
                     </strong>{' '}
                     <br className="hidden sm:block" />
                     across the US, UK &amp; India
