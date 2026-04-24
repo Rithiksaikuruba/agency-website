@@ -14,10 +14,11 @@ import navIcon from '../assets/Navicon.png';
 
 /* ─── CONSTANTS ───────────────────────────────────────────────────────────── */
 const NAV_LINKS = [
-  { label: 'Services',     href: '#services',     desc: 'Our expertise'  },
-  { label: 'Process',      href: '#process',      desc: 'How we work'    },
-  { label: 'Pricing',      href: '#pricing',      desc: 'Costs'          },
-  { label: 'Testimonials', href: '#testimonials', desc: 'Client reviews' },
+  { label: 'Work',     href: '#work',         desc: 'Case studies'   },
+  { label: 'Services', href: '#pricing',      desc: 'Plans & pricing' },
+  { label: 'Process',  href: '#process',      desc: 'How we work'    },
+  { label: 'About',    href: '#about',        desc: 'Our story'      },
+  { label: 'FAQ',      href: '#faq',          desc: 'Common questions'},
 ];
 
 const SOCIAL_LINKS = [

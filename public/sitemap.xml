@@ -1,41 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-╔══════════════════════════════════════════════════════════════════╗
-║  SITEMAP INDEX — stryvenix.com                                   ║
-║  This is the MASTER sitemap that references child sitemaps.      ║
-║                                                                  ║
-║  FILE STRUCTURE (all go in /public/):                            ║
-║    /public/sitemap.xml          ← this file (sitemap index)      ║
-║    /public/sitemap-pages.xml    ← all website pages              ║
-║    /public/sitemap-images.xml   ← all images (OG, logos, etc.)   ║
-║                                                                  ║
-║  AFTER DEPLOYING:                                                ║
-║    1. Submit https://www.stryvenix.com/sitemap.xml               ║
-║       to Google Search Console → Sitemaps tab                    ║
-║    2. Submit same URL to Bing Webmaster Tools                    ║
-║    3. Ping Google manually (one-time):                           ║
-║       https://www.google.com/ping?sitemap=                       ║
-║         https://www.stryvenix.com/sitemap.xml                   ║
-╚══════════════════════════════════════════════════════════════════╝
--->
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
   <sitemap>
     <loc>https://www.stryvenix.com/sitemap-pages.xml</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2026-04-24</lastmod>
   </sitemap>
-
   <sitemap>
     <loc>https://www.stryvenix.com/sitemap-images.xml</loc>
-    <lastmod>2025-01-01</lastmod>
+    <lastmod>2026-04-24</lastmod>
   </sitemap>
-
-  <!--
-    Uncomment when blog goes live:
-  <sitemap>
-    <loc>https://www.stryvenix.com/sitemap-blog.xml</loc>
-    <lastmod>2025-01-01</lastmod>
-  </sitemap>
-  -->
-
 </sitemapindex>
