@@ -43,15 +43,15 @@ const projectsData = [
     id: "01"
   },
   {
-    title: "Drybar",
-    category: "Beauty & Salon",
-    serviceType: "Business Website Development",
-    description: "Drybar is a beloved US blowout salon chain with 150+ locations. Their site nails warm brand storytelling, location-based booking, and a bright, lifestyle-driven visual identity.",
-    alt: "Drybar beauty salon website — warm lifestyle photography with location-based booking system",
-    year: "2025",
-    img: "https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2667&auto=format&fit=crop",
-    url: "https://www.drybar.com",
-    id: "02"
+  title: "Aesop",
+  category: "Luxury Skincare",
+  serviceType: "Brand Website & E-Commerce",
+  description: "Aesop is a cult Australian luxury skincare brand renowned for its apothecary-inspired stores and strikingly minimal digital presence. Their website blends dark typography, editorial photography, and a refined product discovery experience.",
+  alt: "Aesop luxury skincare website — minimalist editorial photography with apothecary dark aesthetic",
+  year: "2025",
+  img: "https://images.unsplash.com/photo-1570194065650-d99fb4b38e87?q=80&w=2670&auto=format&fit=crop",
+  url: "https://www.aesop.com",
+  id: "02"
   },
   {
     title: "Carvana",
