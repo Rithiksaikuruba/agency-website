@@ -1028,10 +1028,10 @@ const PerformanceShowcase = () => (
    6. STATS STRIP
    ════════════════════════════════════════════════════════════ */
 const stats = [
-  { value: '50+',   label: 'Startups Launched',   sub: 'US, UK & India'      },
+  { value: '20+',   label: 'Startups Launched',   sub: 'US, UK & India'      },
   { value: '2–4wk', label: 'Website Delivery Time', sub: 'Average timeline'    },
   { value: '14hrs', label: 'Saved per Week',         sub: 'Via AI automation'  },
-  { value: '5.0★',  label: 'Client Rating',          sub: '50 verified reviews' },
+  { value: '4.6★',  label: 'Client Rating',          sub: '20 verified reviews' },
 ];
 
 const StatsStrip = () => (
