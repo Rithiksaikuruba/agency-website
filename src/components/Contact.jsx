@@ -9,10 +9,10 @@ import {
 import stryvenixLogo from '../assets/Stryvenix-Transparent-Logo1.png';
 
 /* ─────────────────────────────────────────────────
-   Uses FormSubmit.co — zero setup, no API key needed.
-   First submission will ask you to confirm your email.
+   Uses Web3Forms — zero setup, works instantly.
+   https://web3forms.com
    ───────────────────────────────────────────────── */
-const CONTACT_EMAIL = 'contact.stryvenix@gmail.com';
+const WEB3FORMS_KEY = '44658e5a-a984-4bf0-94d1-89820d62c382';
 
 /* --- GLOBAL STYLES --- */
 const GlobalStyles = () => (
@@ -215,7 +215,7 @@ export default function Contact() {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
   };
 
-  /* ── SUBMIT using FormSubmit.co (no API key needed) ── */
+  /* ── SUBMIT using Web3Forms (no confirmation email needed) ── */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -225,7 +225,6 @@ export default function Contact() {
       return;
     }
 
-    // Basic email format check
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(form.email.trim())) {
       setError('Please enter a valid email address.');
@@ -235,30 +234,24 @@ export default function Contact() {
     setSending(true);
 
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
           name: form.name.trim(),
           email: form.email.trim(),
           message: form.message.trim(),
-          _subject: `New contact from ${form.name.trim()} — Stryvenix`,
-          // Disable FormSubmit's default captcha page
-          _captcha: 'false',
-          // Prevent spam bot submissions
-          _honey: '',
+          subject: `New contact from ${form.name.trim()} — Stryvenix`,
         }),
       });
 
       const result = await response.json();
 
-      if (result.success === 'true' || result.success === true) {
+      if (result.success) {
         setSent(true);
       } else {
-        setError('Something went wrong. Please try again or email us directly.');
+        setError(result.message || 'Something went wrong. Please try again or email us directly.');
       }
     } catch (err) {
       console.error('Form submit error:', err);
