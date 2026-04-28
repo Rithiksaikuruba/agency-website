@@ -270,7 +270,7 @@ export default function Testimonials() {
           {/* Trust Stats */}
           <div className="flex flex-wrap justify-center gap-8 border-y border-slate-200 dark:border-white/5 py-6 px-8">
               <div className="text-center">
-                  <div className="text-2xl font-bold text-slate-900 dark:text-white">50+</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white">20+</div>
                   <div className="text-[10px] uppercase font-bold text-slate-400">Projects Delivered</div>
               </div>
               <div className="w-px h-10 bg-slate-200 dark:bg-white/10 hidden sm:block"></div>
