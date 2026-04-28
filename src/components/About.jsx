@@ -742,24 +742,24 @@ const comparison = {
 /* Timeline — every milestone leads with the result */
 const milestones = [
   {
-    year: '2022',
-    event:
-      'Launched Stryvenix in Hyderabad. First three clients ranked on page one within 90 days and saw measurable lead growth.',
-  },
-  {
-    year: '2023',
-    event:
-      "Delivered first production AI chatbot — cutting a client's inbound support load by 60%. Automation services went live.",
-  },
-  {
-    year: '2024',
-    event:
-      'Expanded to US and UK clients. Crossed 15 projects. EdTech client grew organic traffic 3× in six months.',
-  },
-  {
     year: '2025',
     event:
-      'Launched Stryvenix AI Framework V2 — proprietary automation layer now powering growth dashboards for five active client accounts.',
+      'Founded Stryvenix with a focus on building SEO-first websites that generate consistent inbound leads instead of just looking good.',
+  },
+  {
+    year: '2025 (Mid)',
+    event:
+      'Delivered initial client projects — improving search visibility, lead flow, and website conversions within the first 60–90 days.',
+  },
+  {
+    year: '2025 (Late)',
+    event:
+      'Expanded into AI and automation — implementing chatbots and workflow systems to reduce manual work and improve business efficiency.',
+  },
+  {
+    year: '2026',
+    event:
+      'Scaling Stryvenix into a performance-driven growth partner — combining SEO, AI, and automation into a unified system that turns websites into lead-generation engines.',
   },
 ];
 
