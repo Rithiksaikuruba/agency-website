@@ -202,7 +202,7 @@ export default function About() {
               </div>
 
               <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-1" itemProp="name">
-                Rithik Sai Kuruba
+                Rithik Sai Gowda
               </h3>
               <p className="text-sm font-semibold text-indigo-600 dark:text-indigo-400 mb-1" itemProp="jobTitle">
                 Founder & CEO — Stryvenix
