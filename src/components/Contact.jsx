@@ -9,12 +9,10 @@ import {
 import stryvenixLogo from '../assets/Stryvenix-Transparent-Logo1.png';
 
 /* ─────────────────────────────────────────────────
-   IMPORTANT – Web3Forms setup (free, instant, no CORS)
-   1. Go to  https://web3forms.com
-   2. Enter  contact.stryvenix@gmail.com  → click "Create Access Key"
-   3. Copy the key and paste it below
+   Uses FormSubmit.co — zero setup, no API key needed.
+   First submission will ask you to confirm your email.
    ───────────────────────────────────────────────── */
-const WEB3FORMS_ACCESS_KEY = 'YOUR_WEB3FORMS_ACCESS_KEY'; // ← paste your key here
+const CONTACT_EMAIL = 'contact.stryvenix@gmail.com';
 
 /* --- GLOBAL STYLES --- */
 const GlobalStyles = () => (
@@ -217,44 +215,50 @@ export default function Contact() {
     setForm(f => ({ ...f, [e.target.name]: e.target.value }));
   };
 
-  /* ── FIXED SUBMIT using Web3Forms ── */
+  /* ── SUBMIT using FormSubmit.co (no API key needed) ── */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
-    // Basic validation
     if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
       setError('Please fill in all fields before sending.');
+      return;
+    }
+
+    // Basic email format check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.email.trim())) {
+      setError('Please enter a valid email address.');
       return;
     }
 
     setSending(true);
 
     try {
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
         body: JSON.stringify({
-          access_key: WEB3FORMS_ACCESS_KEY,
           name: form.name.trim(),
           email: form.email.trim(),
           message: form.message.trim(),
-          subject: `New contact from ${form.name.trim()} — Stryvenix`,
-          from_name: 'Stryvenix Contact Form',
-          // Honeypot anti-spam field (leave empty)
-          botcheck: '',
+          _subject: `New contact from ${form.name.trim()} — Stryvenix`,
+          // Disable FormSubmit's default captcha page
+          _captcha: 'false',
+          // Prevent spam bot submissions
+          _honey: '',
         }),
       });
 
       const result = await response.json();
 
-      if (result.success) {
+      if (result.success === 'true' || result.success === true) {
         setSent(true);
       } else {
-        setError(result.message || 'Something went wrong. Please try again.');
+        setError('Something went wrong. Please try again or email us directly.');
       }
     } catch (err) {
       console.error('Form submit error:', err);
@@ -358,10 +362,10 @@ export default function Contact() {
               </p>
 
               <div className="space-y-1">
-                <ContactRow delay={0.1} icon={Phone}  title="Phone"    value="+91 9550192069"               href="tel:+919550192069"                    badge="Direct" />
-                <ContactRow delay={0.2} icon={Mail}   title="Email"    value="contact.stryvenix@gmail.com"  href="mailto:contact.stryvenix@gmail.com"   />
-                <ContactRow delay={0.3} icon={MapPin} title="Location" value="Working remotely worldwide"   />
-                <ContactRow delay={0.4} icon={Clock}  title="Response" value="Within 24 hours"              badge="Fast" />
+                <ContactRow delay={0.1} icon={Phone}  title="Phone"    value="+91 9550192069"              href="tel:+919550192069"                   badge="Direct" />
+                <ContactRow delay={0.2} icon={Mail}   title="Email"    value="contact.stryvenix@gmail.com" href="mailto:contact.stryvenix@gmail.com"  />
+                <ContactRow delay={0.3} icon={MapPin} title="Location" value="Working remotely worldwide"  />
+                <ContactRow delay={0.4} icon={Clock}  title="Response" value="Within 24 hours"             badge="Fast" />
               </div>
             </div>
 
@@ -407,8 +411,8 @@ export default function Contact() {
 
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
-                  <FloatInput label="Your name"      name="name"    value={form.name}    onChange={handleChange} />
-                  <FloatInput label="Email address"  type="email"   name="email"   value={form.email}   onChange={handleChange} />
+                  <FloatInput label="Your name"     name="name"    value={form.name}    onChange={handleChange} />
+                  <FloatInput label="Email address" type="email"   name="email"   value={form.email}   onChange={handleChange} />
                 </div>
 
                 <FloatTextarea label="Tell us about your project..." name="message" value={form.message} onChange={handleChange} />
