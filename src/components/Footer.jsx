@@ -33,7 +33,7 @@ const NAPSchema = () => (
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Bangalore",
-        "addressRegion": "Telangana",
+        "addressRegion": "Karnataka",
         "addressCountry": "IN"
       },
       "geo": {
