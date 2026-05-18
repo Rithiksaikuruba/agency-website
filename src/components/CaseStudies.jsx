@@ -12,7 +12,7 @@ const caseStudies = [
   {
     id: '01',
     client: 'NexGen Edutech',
-    location: 'Hyderabad, India',
+    location: 'Bangalore, India',
     category: 'Web Design & Development',
     service: 'website-design',
     industry: 'EdTech',

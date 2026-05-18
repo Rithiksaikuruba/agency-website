@@ -1,4 +1,5 @@
 import React from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -11,8 +12,53 @@ import About from './components/About';
 import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
+import Careers from './components/Careers';
 
-export default function App() {
+/* ── Main single-page layout ── */
+function HomePage() {
+  return (
+    <main id="main-content" role="main">
+      <section aria-label="Stryvenix — Website Design, AI and Automation Agency for Startups">
+        <Hero />
+      </section>
+
+      <section id="why-choose-us" aria-label="Why Choose Stryvenix Over Other Agencies">
+        <WhyChooseUs />
+      </section>
+
+      <section id="work" aria-label="Case Studies — Website Design, AI and Automation Projects by Stryvenix">
+        <CaseStudies />
+      </section>
+
+      <section id="testimonials" aria-label="Client Testimonials and Reviews — Stryvenix Agency">
+        <Testimonials />
+      </section>
+
+      <section id="process" aria-label="Our Process — How Stryvenix Builds Websites and AI Systems">
+        <Process />
+      </section>
+
+      <section id="pricing" aria-label="Pricing Plans — Website Design, AI and Automation Services">
+        <Pricing />
+      </section>
+
+      <section id="about" aria-label="About Stryvenix — Website Design and AI Agency Based in Bangalore">
+        <About />
+      </section>
+
+      <section id="faq" aria-label="Frequently Asked Questions About Stryvenix Services">
+        <FAQ />
+      </section>
+
+      <section id="contact" aria-label="Contact Stryvenix — Book a Free Discovery Call">
+        <Contact />
+      </section>
+    </main>
+  );
+}
+
+/* ── Root layout shared across all pages ── */
+function Layout({ children }) {
   return (
     <div className="bg-slate-50 text-slate-900 dark:bg-[#020617] dark:text-slate-100">
       <a
@@ -26,45 +72,39 @@ export default function App() {
         <Navbar />
       </header>
 
-      <main id="main-content" role="main">
-        <section aria-label="Stryvenix — Website Design, AI and Automation Agency for Startups">
-          <Hero />
-        </section>
-
-        <section id="why-choose-us" aria-label="Why Choose Stryvenix Over Other Agencies">
-          <WhyChooseUs />
-        </section>
-
-        <section id="work" aria-label="Case Studies — Website Design, AI and Automation Projects by Stryvenix">
-          <CaseStudies />
-        </section>
-
-        <section id="testimonials" aria-label="Client Testimonials and Reviews — Stryvenix Agency">
-          <Testimonials />
-        </section>
-
-        <section id="process" aria-label="Our Process — How Stryvenix Builds Websites and AI Systems">
-          <Process />
-        </section>
-
-        <section id="pricing" aria-label="Pricing Plans — Website Design, AI and Automation Services">
-          <Pricing />
-        </section>
-
-        <section id="about" aria-label="About Stryvenix — Website Design and AI Agency Based in Hyderabad">
-          <About />
-        </section>
-
-        <section id="faq" aria-label="Frequently Asked Questions About Stryvenix Services">
-          <FAQ />
-        </section>
-
-        <section id="contact" aria-label="Contact Stryvenix — Book a Free Discovery Call">
-          <Contact />
-        </section>
-      </main>
+      {children}
 
       <Footer />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Home — single page app */}
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <HomePage />
+            </Layout>
+          }
+        />
+
+        {/* Careers — standalone page */}
+        <Route
+          path="/careers"
+          element={
+            <Layout>
+              <main id="main-content" role="main">
+                <Careers />
+              </main>
+            </Layout>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }

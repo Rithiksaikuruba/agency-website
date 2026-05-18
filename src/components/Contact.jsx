@@ -355,8 +355,8 @@ export default function Contact() {
               </p>
 
               <div className="space-y-1">
-                <ContactRow delay={0.1} icon={Phone}  title="Phone"    value="+91 9550192069"              href="tel:+919550192069"                   badge="Direct" />
-                <ContactRow delay={0.2} icon={Mail}   title="Email"    value="contact.stryvenix@gmail.com" href="mailto:contact.stryvenix@gmail.com"  />
+                <ContactRow delay={0.1} icon={Phone}  title="Phone"    value="+91 9550349199"              href="tel:+919550349199"                   badge="Direct" />
+                <ContactRow delay={0.2} icon={Mail}   title="Email"    value="contact@stryvenix.com" href="mailto:contact@stryvenix.com"  />
                 <ContactRow delay={0.3} icon={MapPin} title="Location" value="Working remotely worldwide"  />
                 <ContactRow delay={0.4} icon={Clock}  title="Response" value="Within 24 hours"             badge="Fast" />
               </div>

@@ -209,7 +209,7 @@ export default function About() {
               </p>
               <div className="flex items-center gap-1.5 text-sm text-slate-400 mb-5" itemProp="address">
                 <MapPin className="w-3.5 h-3.5 flex-shrink-0" aria-hidden="true" />
-                <span>Hyderabad, India · Serving India, US & UK</span>
+                <span>Bangalore, India · Serving India, US & UK</span>
               </div>
 
               <p
@@ -374,7 +374,7 @@ export default function About() {
         >
           <meta itemProp="name"            content="Stryvenix"         />
           <meta itemProp="foundingDate"    content="2022"              />
-          <meta itemProp="foundingLocation"content="Hyderabad, India"  />
+          <meta itemProp="foundingLocation"content="Bangalore, India"  />
 
           <h3 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-12">
             Our Journey

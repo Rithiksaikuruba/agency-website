@@ -66,7 +66,7 @@ Our automation clients save an average of 14 hours per week within the first mon
     id: 5,
     category: 'India',
     question: 'Does Stryvenix work with businesses in India?',
-    answer: `Yes — Stryvenix is based in Hyderabad and serves businesses across India including Hyderabad, Bangalore, Delhi, Mumbai, Chennai, Kochi, and Pune. 
+    answer: `Yes — Stryvenix is based in Bangalore and serves businesses across India including Hyderabad, Bangalore, Delhi, Mumbai, Chennai, Kochi, and Pune. 
 
 We offer **India pricing parity** — adjusted rates that reflect regional economics while maintaining the same quality as our international projects. We work with Indian startups, SMEs, and established businesses across industries including EdTech, Logistics, Food & Restaurant, Manufacturing, and Professional Services.
 

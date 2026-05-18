@@ -28,11 +28,11 @@ const NAPSchema = () => (
       "logo": "https://www.stryvenix.com/src/assets/Navicon.png",
       "image": "https://www.stryvenix.com/og-image.png",
       "description": "Stryvenix is a creative tech agency specializing in website design, AI solutions, and business automation for clients in the US, UK, and India.",
-      "telephone": "+91-98765-43210",
-      "email": "hello@stryvenix.com",
+      "telephone": "+91 9550349199",
+      "email": "contact@stryvenix.com",
       "address": {
         "@type": "PostalAddress",
-        "addressLocality": "Hyderabad",
+        "addressLocality": "Bangalore",
         "addressRegion": "Telangana",
         "addressCountry": "IN"
       },
@@ -114,9 +114,9 @@ const GlobalStyles = () => (
 
 /* ─── TICKER ── */
 const tickerItems = [
-  '✦ Based in Hyderabad', '✦ Available Worldwide', '✦ 20+ Projects Delivered',
+  '✦ Based in Bangalore', '✦ Available Worldwide', '✦ 20+ Projects Delivered',
   '✦ 6-Month Support', '✦ Zero Hidden Fees', '✦ On-Time Every Time',
-  '✦ Based in Hyderabad', '✦ Available Worldwide', '✦ 20+ Projects Delivered',
+  '✦ Based in Bangalore', '✦ Available Worldwide', '✦ 20+ Projects Delivered',
   '✦ 6-Month Support', '✦ Zero Hidden Fees', '✦ On-Time Every Time',
 ];
 
@@ -174,21 +174,30 @@ const NewsletterInput = () => {
 
 /* ─── SOCIAL BUTTON ── */
 const SocialBtn = ({ icon: Icon, href, label }) => (
-  <a href={href} aria-label={label}
+  <a href={href} aria-label={label} target="_blank" rel="noopener noreferrer"
     className="social-btn w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 dark:hover:bg-indigo-500 dark:hover:border-indigo-500 dark:hover:text-white"
   >
     <Icon size={15} />
   </a>
 );
 
-/* ─── LINK GROUP ── */
+/* ─── LINK GROUP ──
+   Each link can be:
+   - A section anchor: pass sectionId → uses smooth scroll onClick
+   - An internal page route: pass href only (no sectionId) → normal React Router navigation
+   - An external URL: pass href + external: true → opens in new tab
+*/
 const LinkGroup = ({ title, links }) => (
   <div>
     <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-slate-900 dark:text-white mb-5">{title}</p>
     <ul className="space-y-3.5">
-      {links.map(({ label, href }) => (
+      {links.map(({ label, href, sectionId, external }) => (
         <li key={label}>
-          <a href={href}
+          <a
+            href={href}
+            onClick={sectionId ? (e) => scrollToSection(e, sectionId) : undefined}
+            target={external ? '_blank' : undefined}
+            rel={external ? 'noopener noreferrer' : undefined}
             className="footer-link flex items-center gap-1.5 text-[13px] font-medium text-slate-500 dark:text-slate-400 transition-colors"
           >
             <ArrowRight size={11} className="footer-link-arrow text-indigo-500 flex-shrink-0" />
@@ -263,10 +272,10 @@ export default function Footer() {
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>→</motion.span>
             </motion.a>
 
-            {/* View Our Work — smooth scrolls to #services */}
+            {/* View Our Work — smooth scrolls to #case-studies */}
             <motion.a
-              href="#services"
-              onClick={(e) => scrollToSection(e, 'services')}
+              href="#case-studies"
+              onClick={(e) => scrollToSection(e, 'case-studies')}
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
               className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-white dark:bg-white/[0.05] border border-slate-200 dark:border-white/[0.08] text-slate-700 dark:text-slate-300 text-sm font-bold hover:border-indigo-400 dark:hover:border-indigo-500 transition-colors"
             >
@@ -317,31 +326,31 @@ export default function Footer() {
             {/* Socials */}
             <div className="flex gap-2.5">
               <SocialBtn icon={Twitter}   href="https://twitter.com/stryvenix"                    label="Stryvenix on Twitter" />
-              <SocialBtn icon={Github}    href="#"                                                 label="Stryvenix on GitHub" />
+              <SocialBtn icon={Github}    href="https://github.com/stryvenix"                     label="Stryvenix on GitHub" />
               <SocialBtn icon={Linkedin}  href="https://www.linkedin.com/company/stryvenix"       label="Stryvenix on LinkedIn" />
               <SocialBtn icon={Instagram} href="https://www.instagram.com/stryvenix"              label="Stryvenix on Instagram" />
             </div>
           </div>
 
-          {/* Company links */}
+          {/* Company links — section anchors use sectionId for smooth scroll */}
           <div className="lg:col-span-2">
             <LinkGroup title="Company" links={[
-              { label: 'About Us',  href: '/about' },
-              { label: 'Our Work',  href: '/work' },
-              { label: 'Process',   href: '/#process' },
-              { label: 'Pricing',   href: '/pricing' },
-              { label: 'Careers',   href: '/careers' },
+              { label: 'About Us',  href: '#about',        sectionId: 'about'        },
+              { label: 'Our Work',  href: '#work', sectionId: 'work' },
+              { label: 'Process',   href: '#process',      sectionId: 'process'      },
+              { label: 'Pricing',   href: '#pricing',      sectionId: 'pricing'      },
+              { label: 'Careers',   href: '/careers'                                 },
             ]} />
           </div>
 
-          {/* Services links */}
+          {/* Services links — all scroll to #services section */}
           <div className="lg:col-span-2">
             <LinkGroup title="Services" links={[
-              { label: 'Web Design & Development', href: '/services/web-design' },
-              { label: 'AI Solutions',             href: '/services/ai' },
-              { label: 'Automation',               href: '/services/automation' },
-              { label: 'SEO Audit',                href: '/services/seo-audit' },
-              { label: 'Maintenance',              href: '/services/maintenance' },
+              { label: 'Web Design & Development', href: '#services', sectionId: 'services' },
+              { label: 'AI Solutions',             href: '#services', sectionId: 'services' },
+              { label: 'Automation',               href: '#services', sectionId: 'services' },
+              { label: 'SEO Audit',                href: '#services', sectionId: 'services' },
+              { label: 'Maintenance',              href: '#services', sectionId: 'services' },
             ]} />
           </div>
 
@@ -356,9 +365,9 @@ export default function Footer() {
             {/* NAP */}
             <address className="mt-7 space-y-2.5 not-italic">
               {[
-                { icon: Mail,   text: 'contact.stryvenix@gmail.com', href: 'mailto:contact.stryvenix@gmail.com' },
-                { icon: Phone,  text: '+91 9550192069',               href: 'tel:+919550192069' },
-                { icon: MapPin, text: 'Hyderabad, India',              href: null },
+                { icon: Mail,   text: 'contact@stryvenix.com', href: 'mailto:contact@stryvenix.com' },
+                { icon: Phone,  text: '+91 9550349199',               href: 'tel:+919550349199' },
+                { icon: MapPin, text: 'Bangalore, India',              href: null },
               ].map(({ icon: Icon, text, href }) => (
                 <div key={text} className="flex items-center gap-2.5 text-[12.5px] text-slate-500 dark:text-slate-400">
                   <div className="w-6 h-6 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 flex items-center justify-center flex-shrink-0">
@@ -377,7 +386,7 @@ export default function Footer() {
         {/* ── BOTTOM BAR ── */}
         <div className="pt-8 border-t border-slate-200 dark:border-white/[0.05] flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[12.5px] text-slate-400 dark:text-slate-500">
-            © {year} Stryvenix. Crafted with care in Hyderabad 🇮🇳
+            © {year} Stryvenix. Crafted with care in Bangalore 🇮🇳
           </p>
 
           <div className="flex items-center gap-1.5">
@@ -387,9 +396,9 @@ export default function Footer() {
 
           <div className="flex gap-6">
             {[
-              { label: 'Privacy Policy',   href: '/privacy-policy' },
+              { label: 'Privacy Policy',   href: '/privacy-policy'   },
               { label: 'Terms of Service', href: '/terms-of-service' },
-              { label: 'Cookie Policy',    href: '/cookie-policy' },
+              { label: 'Cookie Policy',    href: '/cookie-policy'    },
             ].map(({ label, href }) => (
               <a key={label} href={href}
                 className="text-[12.5px] text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors font-medium"
