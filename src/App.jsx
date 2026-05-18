@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -42,7 +42,7 @@ function HomePage() {
         <Pricing />
       </section>
 
-      <section id="about" aria-label="About Stryvenix — Website Design and AI Agency Based in Bangalore">
+      <section id="about" aria-label="About Stryvenix — Website Design and AI Agency">
         <About />
       </section>
 
@@ -57,7 +57,7 @@ function HomePage() {
   );
 }
 
-/* ── Root layout shared across all pages ── */
+/* ── Shared Layout ── */
 function Layout({ children }) {
   return (
     <div className="bg-slate-50 text-slate-900 dark:bg-[#020617] dark:text-slate-100">
@@ -81,30 +81,28 @@ function Layout({ children }) {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Home — single page app */}
-        <Route
-          path="/"
-          element={
-            <Layout>
-              <HomePage />
-            </Layout>
-          }
-        />
+    <Routes>
+      {/* Home */}
+      <Route
+        path="/"
+        element={
+          <Layout>
+            <HomePage />
+          </Layout>
+        }
+      />
 
-        {/* Careers — standalone page */}
-        <Route
-          path="/careers"
-          element={
-            <Layout>
-              <main id="main-content" role="main">
-                <Careers />
-              </main>
-            </Layout>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+      {/* Careers */}
+      <Route
+        path="/careers"
+        element={
+          <Layout>
+            <main id="main-content" role="main">
+              <Careers />
+            </main>
+          </Layout>
+        }
+      />
+    </Routes>
   );
 }
