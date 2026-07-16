@@ -5,11 +5,6 @@ import {
   Globe,
   Clock,
   Star,
-  BarChart3,
-  Zap,
-  ArrowUpRight,
-  Bell,
-  CheckCircle2,
   Quote,
 } from 'lucide-react';
 
@@ -40,7 +35,6 @@ export const HeadMeta = () => (
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-    <link rel="preconnect" href="https://i.pravatar.cc" />
     <link rel="dns-prefetch" href="https://cal.com" />
     <link rel="dns-prefetch" href="https://grainy-gradients.vercel.app" />
 
@@ -320,7 +314,7 @@ const JsonLd = () => {
           {
             '@type': 'Review',
             reviewRating: { '@type': 'Rating', ratingValue: '5', bestRating: '5' },
-            author: { '@type': 'Person', name: 'Alex M.' },
+            author: { '@type': 'Person', name: 'Srini Gubbala' },
             datePublished: '2025-12-10',
             reviewBody:
               'Stryvenix built our MVP landing page in record time. Conversion rate jumped significantly after launch.',
@@ -794,31 +788,32 @@ const StarRating = ({ count = 5, label = 'Stryvenix rated 5 out of 5 stars' }) =
   </div>
 );
 
-const AvatarGroup = ({ count = 4 }) => (
-  <div
-    className="flex -space-x-3 sm:-space-x-4 shrink-0"
-    role="group"
-    aria-label={`${count} verified Stryvenix clients`}
-  >
-    {Array.from({ length: count }).map((_, i) => (
-      <div
-        key={i}
-        className="w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white dark:border-[#020617] bg-slate-200 dark:bg-slate-700 flex items-center justify-center overflow-hidden hover:-translate-y-1 transition-transform shrink-0"
-      >
-        <img
-          src={`https://i.pravatar.cc/100?img=${i + 45}`}
-          alt={`Verified Stryvenix client — startup founder served across US, UK and India`}
-          className="w-full h-full object-cover"
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-          width="48"
-          height="48"
-        />
-      </div>
-    ))}
-  </div>
-);
+// Updated AvatarGroup: Replaces external images with clean colored initials
+const AvatarGroup = () => {
+  const avatars = [
+    { initial: 'S', color: 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400' },
+    { initial: 'P', color: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400' },
+    { initial: 'J', color: 'bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-400' },
+    { initial: 'R', color: 'bg-amber-100 text-amber-600 dark:bg-amber-900/50 dark:text-amber-400' },
+  ];
+
+  return (
+    <div
+      className="flex -space-x-3 sm:-space-x-4 shrink-0"
+      role="group"
+      aria-label="Verified Stryvenix clients"
+    >
+      {avatars.map((avatar, i) => (
+        <div
+          key={i}
+          className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 border-white dark:border-[#020617] flex items-center justify-center overflow-hidden hover:-translate-y-1 transition-transform shrink-0 ${avatar.color}`}
+        >
+          <span className="text-sm sm:text-base font-bold">{avatar.initial}</span>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 /* ════════════════════════════════════════════════════════════
    4. ANIMATED TEXT
@@ -861,165 +856,34 @@ const AnimatedText = ({ text, className, delay = 0 }) => {
 };
 
 /* ════════════════════════════════════════════════════════════
-   5. PERFORMANCE DASHBOARD
+   5. FLOATING HERO IMAGES COMPONENT
    ════════════════════════════════════════════════════════════ */
-const PerformanceShowcase = () => (
+const HeroVisuals = () => (
   <figure
-    className="relative w-full max-w-[480px] mx-auto my-10 lg:my-0 flex flex-col gap-5 px-2 sm:px-0 pb-16 sm:pb-14 lg:pb-0 m-0"
-    aria-labelledby="dashboard-caption"
+    className="relative w-full max-w-[700px] mx-auto my-10 lg:my-0 flex flex-col items-center justify-center min-h-[400px] sm:min-h-[500px] overflow-hidden lg:overflow-visible px-4"
+    aria-label="Stryvenix digital asset showcasing high-converting website design"
   >
-    <figcaption id="dashboard-caption" className="sr-only">
-      Stryvenix client growth dashboard powered by the Stryvenix AI Framework V2:
-      $124,500 monthly recurring revenue with 32.4% growth, workflow automation
-      saving 14 hours per week for a startup client.
-    </figcaption>
-
+    {/* Background ambient glow */}
     <motion.div
-      animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.02, 1] }}
+      animate={{ opacity: [0.3, 0.6, 0.3], scale: [1, 1.05, 1] }}
       transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-      className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 via-indigo-500/10 to-purple-500/20 blur-3xl rounded-[3rem] pointer-events-none"
+      className="absolute inset-0 bg-gradient-to-tr from-blue-500/20 via-indigo-500/10 to-purple-500/20 blur-3xl rounded-full pointer-events-none"
       aria-hidden="true"
     />
 
+    {/* Main Website Image (Center) */}
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
-      className="relative z-10 bg-white/90 dark:bg-[#0f172a]/90 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 p-5 sm:p-7 rounded-3xl shadow-[0_20px_50px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] overflow-hidden"
+      className="relative z-10 w-full flex justify-center"
     >
-      <div className="flex flex-wrap items-center justify-between gap-4 mb-6 sm:mb-8">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg shadow-blue-500/30 shrink-0">
-            <BarChart3 className="w-5 h-5 sm:w-6 sm:h-6 text-white" aria-hidden="true" />
-          </div>
-          <div>
-            <h3 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-tight">
-              Client Growth Dashboard
-            </h3>
-            <p className="text-[11px] sm:text-xs font-medium text-slate-500 dark:text-slate-400">
-              Stryvenix AI Framework V2
-            </p>
-          </div>
-        </div>
-        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-emerald-50 dark:bg-emerald-500/10 rounded-full border border-emerald-100 dark:border-emerald-500/20 shrink-0">
-          <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2 shrink-0" aria-hidden="true">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-emerald-500"></span>
-          </span>
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-emerald-700 dark:text-emerald-400">
-            Live Data
-          </span>
-        </div>
-      </div>
-
-      <div className="mb-5 sm:mb-6">
-        <p className="text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 mb-1">
-          Monthly Recurring Revenue
-        </p>
-        <div className="flex flex-wrap items-end gap-2 sm:gap-3">
-          <p className="text-4xl sm:text-5xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-            $124.5<span className="text-2xl sm:text-3xl text-slate-400">k</span>
-          </p>
-          <div className="flex items-center gap-1 text-emerald-500 mb-1 sm:mb-2 font-bold text-xs sm:text-sm bg-emerald-50 dark:bg-emerald-500/10 px-2 py-0.5 rounded-md">
-            <ArrowUpRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" aria-hidden="true" />
-            <span>32.4%</span>
-          </div>
-        </div>
-      </div>
-
-      <div className="relative h-24 sm:h-28 w-full mb-6 sm:mb-8" aria-hidden="true" role="presentation">
-        <div className="absolute inset-0 flex flex-col justify-between opacity-20 dark:opacity-10 pointer-events-none">
-          <div className="w-full h-px bg-slate-400"></div>
-          <div className="w-full h-px bg-slate-400"></div>
-          <div className="w-full h-px bg-slate-400"></div>
-        </div>
-        <svg className="w-full h-full overflow-visible" viewBox="0 0 100 40" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          <motion.path
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.5, duration: 1 }}
-            d="M0,40 L0,30 C20,30 30,10 50,20 C70,30 80,5 100,0 L100,40 Z"
-            fill="url(#chartGradient)"
-          />
-          <motion.path
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 1.5, ease: 'easeInOut' }}
-            d="M0,30 C20,30 30,10 50,20 C70,30 80,5 100,0"
-            fill="none"
-            stroke="#3b82f6"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <motion.circle
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 1.5, type: 'spring' }}
-            cx="100" cy="0" r="2.5"
-            fill="#fff" stroke="#3b82f6" strokeWidth="1.5"
-          />
-        </svg>
-      </div>
-
-      <div className="flex flex-col gap-3 pt-4 sm:pt-5 border-t border-slate-100 dark:border-slate-800">
-        <div className="flex items-center justify-between p-3 sm:p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-100 dark:bg-blue-500/20 flex items-center justify-center shrink-0">
-              <Zap className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600 dark:text-blue-400" aria-hidden="true" />
-            </div>
-            <div>
-              <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white">
-                Business Workflow Automated
-              </p>
-              <p className="text-[10px] sm:text-xs text-slate-500 font-medium">
-                AI automation saved 14hrs/week
-              </p>
-            </div>
-          </div>
-          <CheckCircle2 className="w-5 h-5 sm:w-6 sm:h-6 text-emerald-500 shrink-0" aria-hidden="true" />
-        </div>
-      </div>
-    </motion.div>
-
-    <motion.div
-      initial={{ opacity: 0, x: 20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: 1.2, duration: 0.5 }}
-      className="absolute z-20 -bottom-4 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-auto sm:-bottom-6 sm:-right-4 lg:-right-6 bg-white dark:bg-slate-800 p-3 sm:p-4 rounded-2xl shadow-xl border border-slate-100 dark:border-slate-700 flex items-center gap-3 w-[calc(100%-2rem)] max-w-[280px] sm:w-72"
-      role="status"
-      aria-label="New high-ticket lead captured via Stryvenix AI lead generation automation"
-    >
-      <div className="relative shrink-0">
-        <img
-          src="https://i.pravatar.cc/100?img=12"
-          alt="High-ticket lead captured automatically by Stryvenix AI lead generation system"
-          className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
-          loading="eager"
-          fetchPriority="low"
-          decoding="async"
-          width="48"
-          height="48"
-        />
-        <div
-          className="absolute -bottom-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-emerald-500 rounded-full border-2 border-white dark:border-slate-800 flex items-center justify-center"
-          aria-hidden="true"
-        >
-          <Bell className="w-2.5 h-2.5 text-white" />
-        </div>
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[10px] sm:text-xs text-slate-500 dark:text-slate-400 font-medium">Just now</p>
-        <p className="text-xs sm:text-sm font-bold text-slate-900 dark:text-white truncate">
-          New high-ticket lead captured
-        </p>
-      </div>
+      <img
+        src="/Assets/website.PNG"
+        alt="High-converting website design showcase"
+        className="w-full sm:w-[90%] object-contain drop-shadow-2xl"
+        loading="eager"
+      />
     </motion.div>
   </figure>
 );
@@ -1028,7 +892,7 @@ const PerformanceShowcase = () => (
    6. STATS STRIP
    ════════════════════════════════════════════════════════════ */
 const stats = [
-  { value: '20+',   label: 'Startups Launched',   sub: 'US, UK & India'      },
+  { value: '20+',  label: 'Startups Launched',  sub: 'US, UK & India'      },
   { value: '2–4wk', label: 'Website Delivery Time', sub: 'Average timeline'    },
   { value: '14hrs', label: 'Saved per Week',         sub: 'Via AI automation'  },
   { value: '4.6★',  label: 'Client Rating',          sub: '20 verified reviews' },
@@ -1065,12 +929,12 @@ const StatsStrip = () => (
 const TESTIMONIALS = [
   {
     quote: 'Conversion rate jumped significantly after launch. Best agency decision we made.',
-    author: 'Alex M.',
-    role: 'Startup Founder',
-    location: 'United States',
+    author: 'Srini Gubbala',
+    role: 'Founder',
+    location: 'Co AI pro',
     rating: 5,
     date: '2025-12-10',
-    img: 46,
+    colorClass: 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400',
   },
   {
     quote: 'Our team saved 14 hours a week after Stryvenix built our workflow automation.',
@@ -1079,7 +943,7 @@ const TESTIMONIALS = [
     location: 'India',
     rating: 5,
     date: '2025-11-18',
-    img: 47,
+    colorClass: 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/50 dark:text-emerald-400',
   },
   {
     quote: 'Lead capture up 40%. Best investment we made this year — bar none.',
@@ -1088,7 +952,7 @@ const TESTIMONIALS = [
     location: 'United Kingdom',
     rating: 5,
     date: '2026-01-22',
-    img: 48,
+    colorClass: 'bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-400',
   },
 ];
 
@@ -1103,7 +967,7 @@ const TestimonialsStrip = () => (
   >
     <h2 className="sr-only">What Stryvenix clients say</h2>
     <ul className="grid grid-cols-1 sm:grid-cols-3 gap-3" role="list">
-      {TESTIMONIALS.map(({ quote, author, role, location, rating, date, img }) => (
+      {TESTIMONIALS.map(({ quote, author, role, location, rating, date, colorClass }) => (
         <li
           key={author}
           itemScope
@@ -1149,15 +1013,12 @@ const TestimonialsStrip = () => (
           </div>
 
           <footer className="flex items-center gap-2.5 mt-auto pt-2 border-t border-slate-100 dark:border-slate-700/50">
-            <img
-              src={`https://i.pravatar.cc/60?img=${img}`}
-              alt={`${author} — Stryvenix client from ${location}`}
-              className="w-7 h-7 rounded-full object-cover shrink-0"
-              loading="lazy"
-              decoding="async"
-              width="28"
-              height="28"
-            />
+            {/* Replaced external image with clean initial styling */}
+            <div className={`w-7 h-7 rounded-full flex items-center justify-center shrink-0 ${colorClass}`}>
+              <span className="text-xs font-bold uppercase">
+                {author.charAt(0)}
+              </span>
+            </div>
             <div>
               <p
                 itemProp="author"
@@ -1311,9 +1172,6 @@ export default function Hero() {
         </div>
 
         <main className="container mx-auto px-4 sm:px-6 relative z-20 max-w-7xl">
-          {/* FIX APPLIED HERE: Changed `items-center` to `items-start` on the grid parent 
-            so the right column aligns to the top of the text block rather than centering vertically. 
-          */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
 
             <div className="lg:col-span-6 min-h-0 text-left flex flex-col items-start">
@@ -1456,7 +1314,7 @@ export default function Hero() {
                 <meta itemProp="worstRating" content="1" />
                 <meta itemProp="reviewCount" content="50" />
 
-                <AvatarGroup count={4} />
+                <AvatarGroup />
 
                 <div className="text-left">
                   <StarRating label="Stryvenix rated 5 out of 5 stars by 50 clients" />
@@ -1475,12 +1333,8 @@ export default function Hero() {
               <TestimonialsStrip />
             </div>
 
-            {/* FIX APPLIED HERE: Added `lg:sticky lg:top-24` alongside `lg:col-span-6`. 
-              This ensures that as you scroll down the long left column, the aligned dashboard 
-              perfectly follows alongside the text instead of vanishing or dragging the layout down.
-            */}
             <div className="lg:col-span-6 min-h-0 relative mt-12 lg:mt-0 w-full lg:sticky lg:top-24">
-              <PerformanceShowcase />
+              <HeroVisuals />
             </div>
 
           </div>
