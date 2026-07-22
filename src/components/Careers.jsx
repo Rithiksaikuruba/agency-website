@@ -419,7 +419,7 @@ const GlobalStyles = () => (
 
     @media (max-width: 768px) {
       .hero-outer { min-height: auto; padding: 20px 0 0; }
-      .hero-container { padding: 56px 20px 40px; }
+      .hero-container { padding: 104px 20px 40px; }
       .hero-row { gap: 28px; }
       .hero-image-col { order: 2; margin-top: 8px; }
       .hero-image { width: 300px; transform: translateY(0); }
@@ -434,7 +434,7 @@ const GlobalStyles = () => (
     }
 
     @media (max-width: 480px) {
-      .hero-container { padding: 44px 16px 32px; }
+      .hero-container { padding: 96px 16px 32px; }
       .hero-image { width: 220px; }
       .hero-btn-row a { flex: 1 1 100%; justify-content: center; }
       .hero-stat-item { padding: 14px 12px; }
