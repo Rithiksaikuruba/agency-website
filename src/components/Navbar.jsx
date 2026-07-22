@@ -7,48 +7,59 @@ import {
   useSpring,
   useMotionValue,
 } from 'framer-motion';
-import { Menu, X, Zap, Sparkles, Twitter, Instagram, Linkedin, ArrowRight } from 'lucide-react';
+import { Menu, X, Zap, Sparkles, Instagram, ArrowRight, ArrowUpRight } from 'lucide-react';
 
 /* ─── ASSET ───────────────────────────────────────────────────────────────── */
 import navIcon from '../assets/Navicon.png';
 
 /* ─── CONSTANTS ───────────────────────────────────────────────────────────── */
 const NAV_LINKS = [
-  { label: 'Work',     href: '#work',         desc: 'Case studies'   },
-  { label: 'Services', href: '#pricing',      desc: 'Plans & pricing' },
-  { label: 'Process',  href: '#process',      desc: 'How we work'    },
-  { label: 'About',    href: '#about',        desc: 'Our story'      },
-  { label: 'FAQ',      href: '#faq',          desc: 'Common questions'},
-];
-
-const SOCIAL_LINKS = [
-  { icon: <Twitter   size={20} aria-hidden="true" />, label: 'Twitter',   href: '#' },
-  { icon: <Instagram size={20} aria-hidden="true" />, label: 'Instagram', href: '#' },
-  { icon: <Linkedin  size={20} aria-hidden="true" />, label: 'LinkedIn',  href: '#' },
+  { label: 'Work',     href: '/#work',        desc: 'Case studies'   },
+  { label: 'Services', href: '/services',     desc: 'What we offer'  },
+  { label: 'Process',  href: '/#process',     desc: 'How we work'    },
+  { label: 'Pricing',  href: '/#pricing',     desc: 'Custom quotes'  },
+  { label: 'About',    href: '/#about',       desc: 'Our story'      },
+  { label: 'Careers',  href: '/careers',      desc: 'Join the team'  },
+  { label: 'FAQ',      href: '/#faq',         desc: 'Common questions'},
 ];
 
 const BOOKING_URL = 'https://cal.com/stryvenix/30min';
 
 /* ─── SMOOTH SCROLL ───────────────────────────────────────────────────────── */
 const handleScroll = (e, href) => {
-  if (!href.startsWith('#')) return;
-  e.preventDefault();
-  const targetId = href.replace('#', '');
-  if (!targetId) {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // Handles absolute hash links like '/#work'
+  if (href.startsWith('/#')) {
+    const isHome = window.location.pathname === '/';
+    if (isHome) {
+      e.preventDefault();
+      const targetId = href.replace('/#', '');
+      const elem = document.getElementById(targetId);
+      if (elem) {
+        const top = elem.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    }
+    // If not on home, let standard navigation route the user to the homepage hash
     return;
   }
-  const elem = document.getElementById(targetId);
-  if (elem) {
-    const top = elem.getBoundingClientRect().top + window.scrollY - 100;
-    window.scrollTo({ top, behavior: 'smooth' });
+
+  // Handle purely local hash links (fallback)
+  if (href.startsWith('#')) {
+    e.preventDefault();
+    const targetId = href.replace('#', '');
+    if (!targetId) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    const elem = document.getElementById(targetId);
+    if (elem) {
+      const top = elem.getBoundingClientRect().top + window.scrollY - 100;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
   }
 };
 
-/* ─── GLOBAL STYLES (defined ONCE outside the component tree) ─────────────
-   Keeping this outside prevents the <style> tag from being torn down and
-   re-injected on every render.
-──────────────────────────────────────────────────────────────────────────── */
+/* ─── GLOBAL STYLES (defined ONCE outside the component tree) ───────────── */
 const GLOBAL_CSS = `
   :root { --font-body: 'Plus Jakarta Sans', sans-serif; }
 
@@ -64,8 +75,6 @@ const GLOBAL_CSS = `
     background-size: 40px 40px;
   }
 
-  /* Promote the fixed header to its own GPU compositor layer so scroll
-     never triggers a repaint of the main document. */
   .navbar-root { will-change: transform; }
 
   .bg-noise {
@@ -86,7 +95,6 @@ const GLOBAL_CSS = `
     border-radius: 9999px;
   }
 
-  /* Pure-CSS pill transition so we never need framer-motion layout recalc */
   .navbar-pill {
     transition:
       width          0.45s cubic-bezier(0.34,1.56,0.64,1),
@@ -98,7 +106,6 @@ const GLOBAL_CSS = `
   }
 `;
 
-/* Inject once when module loads – never again */
 if (typeof document !== 'undefined') {
   const tag = document.getElementById('navbar-styles');
   if (!tag) {
@@ -109,10 +116,7 @@ if (typeof document !== 'undefined') {
   }
 }
 
-/* ─── MAGNETIC WRAPPER ────────────────────────────────────────────────────
-   Uses requestAnimationFrame to throttle position updates so we're never
-   doing more work than the browser can actually paint.
-──────────────────────────────────────────────────────────────────────────── */
+/* ─── MAGNETIC WRAPPER ──────────────────────────────────────────────────── */
 const MagneticWrapper = ({ children, strength = 0.25 }) => {
   const ref    = useRef(null);
   const rafId  = useRef(null);
@@ -122,7 +126,7 @@ const MagneticWrapper = ({ children, strength = 0.25 }) => {
   const sy     = useSpring(my, { damping: 20, stiffness: 200, mass: 0.5 });
 
   const handleMouseMove = useCallback((e) => {
-    if (rafId.current) return;                      // skip if previous frame not done
+    if (rafId.current) return;
     rafId.current = requestAnimationFrame(() => {
       rafId.current = null;
       if (!ref.current) return;
@@ -250,26 +254,29 @@ const MobileMenu = ({ isOpen, onClose }) => (
           style={{ willChange: 'transform, opacity' }}
         >
           <a
-            href="#contact"
-            onClick={(e) => { handleScroll(e, '#contact'); onClose(); }}
+            href={BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
             className="w-full py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-violet-600 text-white font-bold text-lg flex items-center justify-center gap-3 shadow-lg shadow-indigo-500/30 active:scale-[0.98] transition-transform"
           >
             <Zap size={20} fill="currentColor" aria-hidden="true" />
             Let's Work Together
           </a>
 
-          <div className="grid grid-cols-3 gap-3">
-            {SOCIAL_LINKS.map((social, idx) => (
-              <a
-                key={idx}
-                href={social.href}
-                aria-label={social.label}
-                className="flex items-center justify-center py-4 bg-white rounded-2xl border border-slate-200/60 text-slate-400 hover:text-blue-600 hover:border-blue-200 hover:shadow-md transition-all"
-              >
-                {social.icon}
-              </a>
-            ))}
-          </div>
+          {/* Upgraded Instagram Button */}
+          <a
+            href="https://www.instagram.com/stryvenix/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between px-5 py-4 bg-white rounded-2xl border border-slate-200/60 text-slate-600 hover:text-blue-600 hover:border-blue-200 hover:shadow-md transition-all w-full group active:scale-[0.98]"
+          >
+            <div className="flex items-center gap-3">
+              <Instagram size={20} className="group-hover:scale-110 transition-transform" />
+              <span className="text-sm font-bold">@stryvenix on Instagram</span>
+            </div>
+            <ArrowUpRight size={18} className="opacity-50 group-hover:opacity-100 transition-opacity" />
+          </a>
         </motion.div>
       </motion.nav>
     )}
@@ -281,20 +288,13 @@ export default function Navbar() {
   const [isOpen,     setIsOpen]     = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
-  /* ── Scroll detection ─────────────────────────────────────────────────
-     useMotionValueEvent already runs outside React's render cycle, so it
-     won't cause extra re-renders while scrolling.  We only setState when
-     the threshold is actually crossed (not on every scroll tick).
-  ──────────────────────────────────────────────────────────────────────── */
   const { scrollY } = useScroll();
 
   useMotionValueEvent(scrollY, 'change', (latest) => {
     const crossed = latest > 20;
-    // Only setState when the boundary is crossed – not on every pixel
     setIsScrolled((prev) => (prev !== crossed ? crossed : prev));
   });
 
-  /* ── Lock body scroll when mobile menu is open ─────────────────────── */
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = isOpen ? 'hidden' : '';
@@ -305,16 +305,6 @@ export default function Navbar() {
     <>
       <div className="bg-noise" aria-hidden="true" />
 
-      {/*
-        KEY CHANGE: removed the `layout` prop from this motion.div.
-        `layout` forces framer-motion to measure the DOM on every render,
-        which is extremely expensive when triggered by scroll events.
-
-        Instead we drive the pill → full-width transition with pure CSS
-        (the `.navbar-pill` class above uses CSS transitions on width,
-        border-radius, etc.) which runs entirely on the compositor thread
-        and never blocks the main thread during scrolling.
-      */}
       <motion.header
         className="navbar-root fixed top-0 w-full z-50 px-3 md:px-4 pt-4 md:pt-6 flex justify-center pointer-events-none"
         initial={{ y: -100 }}
@@ -332,12 +322,9 @@ export default function Navbar() {
           `}
         >
           <div className="relative flex items-center justify-between w-full z-10 px-2 md:px-4 pl-4 md:pl-6">
-
-            {/* LOGO */}
             <div className="focus-ring flex items-center shrink-0 pr-4 md:pr-8 group/logo">
               <a
                 href="/"
-                onClick={(e) => handleScroll(e, '#')}
                 className="cursor-pointer outline-none border-none focus:outline-none"
               >
                 <img
@@ -348,10 +335,8 @@ export default function Navbar() {
               </a>
             </div>
 
-            {/* DESKTOP NAV */}
             <DesktopNav links={NAV_LINKS} />
 
-            {/* CTA */}
             <div className="hidden md:flex pl-8">
               <MagneticWrapper strength={0.2}>
                 <motion.a
@@ -380,7 +365,6 @@ export default function Navbar() {
               </MagneticWrapper>
             </div>
 
-            {/* MOBILE TOGGLE */}
             <button
               onClick={() => setIsOpen(!isOpen)}
               aria-expanded={isOpen}
@@ -420,16 +404,3 @@ export default function Navbar() {
     </>
   );
 }
-
-/*
-  ╔══════════════════════════════════════════════════════════════╗
-  ║  Add to public/index.html <head>:                           ║
-  ║                                                              ║
-  ║  <link rel="preconnect" href="https://fonts.googleapis.com"> ║
-  ║  <link rel="preconnect" href="https://fonts.gstatic.com"     ║
-  ║        crossorigin>                                          ║
-  ║  <link href="https://fonts.googleapis.com/css2?family=       ║
-  ║    Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"  ║
-  ║    rel="stylesheet">                                         ║
-  ╚══════════════════════════════════════════════════════════════╝
-*/

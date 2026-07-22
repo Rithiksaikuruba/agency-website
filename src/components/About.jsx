@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import {
   MapPin, Linkedin, ArrowUpRight,
-  Globe, Bot, Zap, Star, Award, TrendingUp,
+  Globe, Star, Award, TrendingUp,
   CheckCircle2, XCircle,
 } from 'lucide-react';
 
@@ -14,37 +14,10 @@ const LINKEDIN_URL = 'https://www.linkedin.com/in/rithik-sai-gowda';
 ───────────────────────────────────────── */
 
 const metrics = [
-  { value: '20+', label: 'Projects Delivered',    sub: 'Across India, US & UK',         icon: TrendingUp },
-  { value: '3',   label: 'Countries',              sub: 'India · US · UK',               icon: Globe      },
+  { value: '20+', label: 'Projects Delivered',    sub: 'Across India, US & UK',        icon: TrendingUp },
+  { value: '3',   label: 'Countries',             sub: 'India · US · UK',              icon: Globe      },
   { value: '98%', label: 'Client Satisfaction',   sub: 'Based on project reviews',       icon: Star       },
   { value: '6mo', label: 'Post-Launch Support',   sub: 'Included on every project',      icon: Award      },
-];
-
-const capabilities = [
-  {
-    icon: Globe,
-    label: 'Websites That Convert',
-    desc:  'SEO-optimised websites built to rank on Google and generate consistent inbound leads.',
-    color: 'text-blue-500',
-    bg:    'bg-blue-50 dark:bg-blue-500/10',
-    border:'border-blue-100 dark:border-blue-500/20',
-  },
-  {
-    icon: Bot,
-    label: 'AI That Actually Works',
-    desc:  'Custom AI systems and chatbots that reduce manual work and automate real client workflows.',
-    color: 'text-purple-500',
-    bg:    'bg-purple-50 dark:bg-purple-500/10',
-    border:'border-purple-100 dark:border-purple-500/20',
-  },
-  {
-    icon: Zap,
-    label: 'Automation at Scale',
-    desc:  'End-to-end automations that save hours per week and keep your pipeline moving without manual effort.',
-    color: 'text-amber-500',
-    bg:    'bg-amber-50 dark:bg-amber-500/10',
-    border:'border-amber-100 dark:border-amber-500/20',
-  },
 ];
 
 const comparison = {
@@ -178,14 +151,14 @@ export default function About() {
         {/* ══════════════════════════════════════
             MAIN GRID
         ══════════════════════════════════════ */}
-        <div className="grid lg:grid-cols-12 gap-8 mb-16">
+        <div className="grid lg:grid-cols-12 gap-8 mb-16 items-stretch">
 
           {/* ── Founder Card ── */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: 0.2 }}
-            className="lg:col-span-4"
+            className="lg:col-span-4 h-full"
           >
             <div
               className="bg-white dark:bg-slate-900/70 rounded-[2rem] border border-slate-200 dark:border-white/[0.07] p-8 h-full flex flex-col"
@@ -256,7 +229,7 @@ export default function About() {
           </motion.div>
 
           {/* ── Right Column ── */}
-          <div className="lg:col-span-8 flex flex-col gap-6">
+          <div className="lg:col-span-8 flex flex-col justify-center gap-8 h-full">
 
             <motion.div
               initial={{ opacity: 0, y: 16 }}
@@ -298,7 +271,7 @@ export default function About() {
                   <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-3">
                     Most Agencies
                   </p>
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-3">
                     {comparison.them.map((item) => (
                       <li key={item} className="flex items-start gap-2.5">
                         <XCircle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" aria-hidden="true" />
@@ -314,7 +287,7 @@ export default function About() {
                   <p className="text-[11px] font-bold uppercase tracking-widest text-indigo-500 mb-3">
                     Stryvenix
                   </p>
-                  <ul className="space-y-2.5">
+                  <ul className="space-y-3">
                     {comparison.us.map((item) => (
                       <li key={item} className="flex items-start gap-2.5">
                         <CheckCircle2 className="w-4 h-4 text-emerald-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
@@ -327,35 +300,9 @@ export default function About() {
                 </div>
               </div>
 
-              <p className="mt-5 text-[13px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-white/[0.06] pt-4">
+              <p className="mt-6 text-[13px] text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-white/[0.06] pt-4">
                 We measure success by your results — not our portfolio screenshots.
               </p>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.35 }}
-              className="grid sm:grid-cols-3 gap-4"
-            >
-              {capabilities.map(({ icon: Icon, label, desc, color, bg, border }) => (
-                <div
-                  key={label}
-                  className="flex flex-col gap-3 bg-white dark:bg-slate-900/70 rounded-2xl border border-slate-200 dark:border-white/[0.07] p-5"
-                >
-                  <div
-                    className={`w-10 h-10 rounded-xl ${bg} ${border} border flex items-center justify-center flex-shrink-0`}
-                  >
-                    <Icon className={`w-5 h-5 ${color}`} aria-hidden="true" />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-slate-900 dark:text-white mb-1">
-                      {label}
-                    </div>
-                    <div className="text-xs text-slate-400 leading-relaxed">{desc}</div>
-                  </div>
-                </div>
-              ))}
             </motion.div>
 
           </div>

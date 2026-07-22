@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Twitter, Github, Linkedin, Instagram, Check, MapPin, Mail, Phone } from 'lucide-react';
+import { ArrowRight, Instagram, Check, MapPin, Mail, Phone } from 'lucide-react';
 import logo from '../assets/Stryvenix-Transparent-Logo.png';
 
 const BOOKING_URL = 'https://cal.com/stryvenix/30min';
@@ -61,9 +61,7 @@ const NAPSchema = () => (
         "sameAs": ["https://www.linkedin.com/in/rithiksaikuruba"]
       },
       "sameAs": [
-        "https://twitter.com/stryvenix",
-        "https://www.linkedin.com/company/stryvenix",
-        "https://www.instagram.com/stryvenix"
+        "https://www.instagram.com/stryvenix/"
       ],
       "hasOfferCatalog": {
         "@type": "OfferCatalog",
@@ -102,9 +100,6 @@ const GlobalStyles = () => (
     }
     .footer-ticker { animation: footer-ticker 30s linear infinite; }
     .footer-ticker:hover { animation-play-state: paused; }
-
-    .social-btn { transition: box-shadow 0.3s ease, transform 0.2s ease, background 0.2s ease; }
-    .social-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px -6px rgba(99,102,241,0.4); }
     
     .footer-link-arrow { transition: opacity 0.2s, transform 0.2s; opacity: 0; transform: translateX(-4px); }
     .footer-link:hover .footer-link-arrow { opacity: 1; transform: translateX(0); }
@@ -171,15 +166,6 @@ const NewsletterInput = () => {
     </div>
   );
 };
-
-/* ─── SOCIAL BUTTON ── */
-const SocialBtn = ({ icon: Icon, href, label }) => (
-  <a href={href} aria-label={label} target="_blank" rel="noopener noreferrer"
-    className="social-btn w-9 h-9 rounded-xl bg-slate-100 dark:bg-white/[0.05] border border-slate-200 dark:border-white/[0.08] flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 dark:hover:bg-indigo-500 dark:hover:border-indigo-500 dark:hover:text-white"
-  >
-    <Icon size={15} />
-  </a>
-);
 
 /* ─── LINK GROUP ──
    Each link can be:
@@ -323,12 +309,17 @@ export default function Footer() {
               <StatChip value="6mo" label="Support" />
             </div>
 
-            {/* Socials */}
-            <div className="flex gap-2.5">
-              <SocialBtn icon={Twitter}   href="https://twitter.com/stryvenix"                    label="Stryvenix on Twitter" />
-              <SocialBtn icon={Github}    href="https://github.com/stryvenix"                     label="Stryvenix on GitHub" />
-              <SocialBtn icon={Linkedin}  href="https://www.linkedin.com/company/stryvenix"       label="Stryvenix on LinkedIn" />
-              <SocialBtn icon={Instagram} href="https://www.instagram.com/stryvenix"              label="Stryvenix on Instagram" />
+            {/* Socials - Expanded Instagram Button */}
+            <div className="pt-2">
+              <a 
+                href="https://www.instagram.com/stryvenix/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-white dark:bg-white/[0.05] border border-slate-200 dark:border-white/[0.08] text-slate-600 dark:text-slate-300 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 dark:hover:bg-indigo-500 dark:hover:border-indigo-500 dark:hover:text-white transition-all duration-300 shadow-sm hover:shadow-md hover:shadow-indigo-500/20 hover:-translate-y-0.5"
+              >
+                <Instagram size={18} />
+                <span className="text-[13px] font-bold">Follow us on Instagram</span>
+              </a>
             </div>
           </div>
 
@@ -343,14 +334,14 @@ export default function Footer() {
             ]} />
           </div>
 
-          {/* Services links — all scroll to #services section */}
+          {/* Services links — each goes to its section on the dedicated /services page */}
           <div className="lg:col-span-2">
             <LinkGroup title="Services" links={[
-              { label: 'Web Design & Development', href: '#services', sectionId: 'services' },
-              { label: 'AI Solutions',             href: '#services', sectionId: 'services' },
-              { label: 'Automation',               href: '#services', sectionId: 'services' },
-              { label: 'SEO Audit',                href: '#services', sectionId: 'services' },
-              { label: 'Maintenance',              href: '#services', sectionId: 'services' },
+              { label: 'Web Design & Development', href: '/services#web-design-development' },
+              { label: 'AI Solutions',             href: '/services#ai-solutions' },
+              { label: 'Automation',               href: '/services#automation' },
+              { label: 'SEO Audit',                href: '/services#seo-audit' },
+              { label: 'Maintenance',               href: '/services#maintenance' },
             ]} />
           </div>
 

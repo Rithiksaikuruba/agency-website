@@ -1267,8 +1267,8 @@ export default function Hero() {
                   </a>
 
                   <a
-                    href="#services"
-                    onClick={(e) => scrollToSection(e, 'services')}
+                    href="#work"
+                    onClick={(e) => scrollToSection(e, 'work')}
                     className="w-full min-[480px]:w-auto group px-6 sm:px-8 py-3.5 sm:py-4 rounded-full bg-white dark:bg-transparent border border-slate-200 dark:border-white/20 text-slate-700 dark:text-white font-semibold text-base sm:text-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-colors inline-flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
                     aria-label="View Stryvenix portfolio — website design, AI automation and startup case studies"
                     title="View Stryvenix portfolio and client case studies"

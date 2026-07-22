@@ -55,7 +55,8 @@ const testimonials = [
     name: "Marcus D.",
     role: "CTO",
     company: "Fintegrate (Austin, TX)",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=150&h=150",
+    image: null,
+    bg: "bg-indigo-600",
     source: "LinkedIn",
     type: "usa"
   },
@@ -64,7 +65,8 @@ const testimonials = [
     name: "Sarah Jenkins",
     role: "Operations Lead",
     company: "Nordic Goods (Seattle)",
-    image: "https://images.unsplash.com/photo-1573496359-7013c53bca14?auto=format&fit=crop&q=80&w=150&h=150",
+    image: null,
+    bg: "bg-teal-600",
     source: "Clutch.co",
     type: "usa"
   },
@@ -73,7 +75,8 @@ const testimonials = [
     name: "David M.",
     role: "E-commerce Director",
     company: "Lumina Edge",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150&h=150",
+    image: null,
+    bg: "bg-cyan-600",
     source: "Verified Client",
     type: "usa"
   },
@@ -126,7 +129,8 @@ const testimonials = [
     name: "Amanda L.",
     role: "VP of Engineering",
     company: "TechNova (Toronto)",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=150&h=150",
+    image: null,
+    bg: "bg-fuchsia-600",
     source: "Clutch.co",
     type: "usa"
   },
@@ -144,7 +148,7 @@ const testimonials = [
 
 /* --- COMPONENT: AVATAR --- */
 const Avatar = ({ data }) => {
-  // If image exists (USA/Western clients usually)
+  // If image exists
   if (data.image) {
     return (
       <img 
@@ -155,8 +159,7 @@ const Avatar = ({ data }) => {
     );
   }
   
-  // If no image (Common for Indian business owners)
-  // We use initials
+  // If no image, we use initials
   const initials = data.name.split(' ').map(n => n[0]).join('').substring(0, 2);
   
   return (
@@ -252,7 +255,7 @@ export default function Testimonials() {
             className="mb-6"
           >
              <span className="text-xs font-bold tracking-[0.2em] uppercase text-indigo-500 dark:text-indigo-400">
-              Trusted Worldwide
+             Trusted Worldwide
             </span>
           </motion.div>
 

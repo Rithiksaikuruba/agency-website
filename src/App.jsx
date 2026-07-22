@@ -13,6 +13,7 @@ import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import Careers from './components/Careers';
+import ServicesPage from './components/ServicesPage';
 
 /* ── Main single-page layout ── */
 function HomePage() {
@@ -38,7 +39,8 @@ function HomePage() {
         <Process />
       </section>
 
-      <section id="pricing" aria-label="Pricing Plans — Website Design, AI and Automation Services">
+      {/* Updated ARIA label reflecting the new section structure */}
+      <section id="pricing" aria-label="Custom Quote — Pricing & Proposals">
         <Pricing />
       </section>
 
@@ -99,6 +101,18 @@ export default function App() {
           <Layout>
             <main id="main-content" role="main">
               <Careers />
+            </main>
+          </Layout>
+        }
+      />
+
+      {/* Services */}
+      <Route
+        path="/services"
+        element={
+          <Layout>
+            <main id="main-content" role="main">
+              <ServicesPage />
             </main>
           </Layout>
         }

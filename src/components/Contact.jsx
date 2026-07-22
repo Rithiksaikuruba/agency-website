@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Phone, Mail, MapPin, MessageSquare,
-  Github, Twitter, Linkedin, CheckCircle2,
+  Instagram, CheckCircle2,
   Calendar, Send, ArrowUpRight, Clock
 } from 'lucide-react';
 
@@ -267,12 +267,6 @@ export default function Contact() {
     setForm({ name: '', email: '', message: '' });
   };
 
-  const socials = [
-    { Icon: Github,   href: '#', label: 'GitHub'   },
-    { Icon: Twitter,  href: '#', label: 'Twitter'  },
-    { Icon: Linkedin, href: '#', label: 'LinkedIn' },
-  ];
-
   return (
     <section className="relative min-h-screen py-24 md:py-32 bg-slate-50 dark:bg-[#020617] overflow-hidden" id="contact">
       <GlobalStyles />
@@ -355,29 +349,27 @@ export default function Contact() {
               </p>
 
               <div className="space-y-1">
-                <ContactRow delay={0.1} icon={Phone}  title="Phone"    value="+91 9550349199"              href="tel:+919550349199"                   badge="Direct" />
+                <ContactRow delay={0.1} icon={Phone}  title="Phone"    value="+91 9550349199"              href="tel:+919550349199"                  badge="Direct" />
                 <ContactRow delay={0.2} icon={Mail}   title="Email"    value="contact@stryvenix.com" href="mailto:contact@stryvenix.com"  />
                 <ContactRow delay={0.3} icon={MapPin} title="Location" value="Working remotely worldwide"  />
                 <ContactRow delay={0.4} icon={Clock}  title="Response" value="Within 24 hours"             badge="Fast" />
               </div>
             </div>
 
-            {/* Social links */}
+            {/* Social links - Upgraded Instagram Card */}
             <div className="mt-10 pt-8 border-t border-slate-200 dark:border-white/10">
               <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 dark:text-slate-500 mb-4">Follow the journey</p>
-              <div className="flex gap-3">
-                {socials.map(({ Icon, href, label }, i) => (
-                  <motion.a
-                    key={i}
-                    href={href}
-                    aria-label={label}
-                    whileHover={{ y: -3 }}
-                    className="w-10 h-10 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 flex items-center justify-center text-slate-500 dark:text-slate-400 hover:bg-slate-900 hover:text-white dark:hover:bg-white dark:hover:text-slate-900 hover:border-transparent transition-all duration-300"
-                  >
-                    <Icon size={16} />
-                  </motion.a>
-                ))}
-              </div>
+              <motion.a
+                href="https://www.instagram.com/stryvenix/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ y: -2 }}
+                className="flex items-center gap-3 px-5 py-3.5 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-600 dark:text-slate-300 hover:bg-indigo-500 hover:text-white hover:border-indigo-500 dark:hover:bg-indigo-500 dark:hover:border-indigo-500 dark:hover:text-white transition-all duration-300 shadow-sm w-full group"
+              >
+                <Instagram size={18} />
+                <span className="text-sm font-bold">@stryvenix on Instagram</span>
+                <ArrowUpRight size={16} className="ml-auto opacity-50 group-hover:opacity-100 transition-opacity" />
+              </motion.a>
             </div>
           </GlassCard>
 

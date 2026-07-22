@@ -328,7 +328,7 @@ export default function FAQ() {
               <ArrowUpRight className="w-4 h-4" />
             </a>
             <a
-              href="mailto:contact.stryvenix@gmail.com"
+              href="mailto:contact@stryvenix.com"
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white dark:bg-white/[0.05] border border-slate-200 dark:border-white/[0.1] text-slate-700 dark:text-slate-200 font-bold text-sm hover:border-indigo-300 dark:hover:border-indigo-500/40 transition-colors"
             >
               Send an Email
