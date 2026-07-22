@@ -15,6 +15,11 @@ import Footer from './components/Footer';
 import Careers from './components/Careers';
 import ServicesPage from './components/ServicesPage';
 
+// Import Legal Pages
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import CookiePolicy from './pages/CookiePolicy';
+
 /* ── Main single-page layout ── */
 function HomePage() {
   return (
@@ -113,6 +118,42 @@ export default function App() {
           <Layout>
             <main id="main-content" role="main">
               <ServicesPage />
+            </main>
+          </Layout>
+        }
+      />
+
+      {/* Privacy Policy */}
+      <Route
+        path="/privacy-policy"
+        element={
+          <Layout>
+            <main id="main-content" role="main">
+              <PrivacyPolicy />
+            </main>
+          </Layout>
+        }
+      />
+
+      {/* Terms of Service */}
+      <Route
+        path="/terms-of-service"
+        element={
+          <Layout>
+            <main id="main-content" role="main">
+              <TermsOfService />
+            </main>
+          </Layout>
+        }
+      />
+
+      {/* Cookie Policy */}
+      <Route
+        path="/cookie-policy"
+        element={
+          <Layout>
+            <main id="main-content" role="main">
+              <CookiePolicy />
             </main>
           </Layout>
         }

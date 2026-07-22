@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Instagram, Check, MapPin, Mail, Phone } from 'lucide-react';
+import { Link } from 'react-router-dom'; // Added for internal routing
 import logo from '../assets/Stryvenix-Transparent-Logo.png';
 
 const BOOKING_URL = 'https://cal.com/stryvenix/30min';
 
 const scrollToSection = (e, id) => {
-  e.preventDefault();
+  if (!id) return;
   const elem = document.getElementById(id);
   if (elem) {
+    e.preventDefault();
     const offset = 100;
     const top = elem.getBoundingClientRect().top + window.scrollY - offset;
     window.scrollTo({ top, behavior: 'smooth' });
@@ -167,30 +169,44 @@ const NewsletterInput = () => {
   );
 };
 
-/* ─── LINK GROUP ──
-   Each link can be:
-   - A section anchor: pass sectionId → uses smooth scroll onClick
-   - An internal page route: pass href only (no sectionId) → normal React Router navigation
-   - An external URL: pass href + external: true → opens in new tab
-*/
+/* ─── LINK GROUP ── */
 const LinkGroup = ({ title, links }) => (
   <div>
     <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-slate-900 dark:text-white mb-5">{title}</p>
     <ul className="space-y-3.5">
-      {links.map(({ label, href, sectionId, external }) => (
-        <li key={label}>
-          <a
-            href={href}
-            onClick={sectionId ? (e) => scrollToSection(e, sectionId) : undefined}
-            target={external ? '_blank' : undefined}
-            rel={external ? 'noopener noreferrer' : undefined}
-            className="footer-link flex items-center gap-1.5 text-[13px] font-medium text-slate-500 dark:text-slate-400 transition-colors"
-          >
-            <ArrowRight size={11} className="footer-link-arrow text-indigo-500 flex-shrink-0" />
-            {label}
-          </a>
-        </li>
-      ))}
+      {links.map(({ label, href, sectionId, external }) => {
+        const isInternalRoute = href.startsWith('/') && !external;
+        const linkClasses = "footer-link flex items-center gap-1.5 text-[13px] font-medium text-slate-500 dark:text-slate-400 transition-colors";
+
+        if (isInternalRoute) {
+          return (
+            <li key={label}>
+              <Link
+                to={href}
+                className={linkClasses}
+              >
+                <ArrowRight size={11} className="footer-link-arrow text-indigo-500 flex-shrink-0" />
+                {label}
+              </Link>
+            </li>
+          );
+        }
+
+        return (
+          <li key={label}>
+            <a
+              href={href}
+              onClick={sectionId ? (e) => scrollToSection(e, sectionId) : undefined}
+              target={external ? '_blank' : undefined}
+              rel={external ? 'noopener noreferrer' : undefined}
+              className={linkClasses}
+            >
+              <ArrowRight size={11} className="footer-link-arrow text-indigo-500 flex-shrink-0" />
+              {label}
+            </a>
+          </li>
+        );
+      })}
     </ul>
   </div>
 );
@@ -258,7 +274,7 @@ export default function Footer() {
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.5, repeat: Infinity }}>→</motion.span>
             </motion.a>
 
-            {/* View Our Work — smooth scrolls to #case-studies */}
+            {/* View Our Work */}
             <motion.a
               href="#case-studies"
               onClick={(e) => scrollToSection(e, 'case-studies')}
@@ -309,7 +325,7 @@ export default function Footer() {
               <StatChip value="6mo" label="Support" />
             </div>
 
-            {/* Socials - Expanded Instagram Button */}
+            {/* Socials */}
             <div className="pt-2">
               <a 
                 href="https://www.instagram.com/stryvenix/" 
@@ -323,25 +339,25 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Company links — section anchors use sectionId for smooth scroll */}
+          {/* Company links */}
           <div className="lg:col-span-2">
             <LinkGroup title="Company" links={[
               { label: 'About Us',  href: '#about',        sectionId: 'about'        },
-              { label: 'Our Work',  href: '#work', sectionId: 'work' },
+              { label: 'Our Work',  href: '#work',         sectionId: 'work' },
               { label: 'Process',   href: '#process',      sectionId: 'process'      },
               { label: 'Pricing',   href: '#pricing',      sectionId: 'pricing'      },
               { label: 'Careers',   href: '/careers'                                 },
             ]} />
           </div>
 
-          {/* Services links — each goes to its section on the dedicated /services page */}
+          {/* Services links */}
           <div className="lg:col-span-2">
             <LinkGroup title="Services" links={[
               { label: 'Web Design & Development', href: '/services#web-design-development' },
               { label: 'AI Solutions',             href: '/services#ai-solutions' },
               { label: 'Automation',               href: '/services#automation' },
               { label: 'SEO Audit',                href: '/services#seo-audit' },
-              { label: 'Maintenance',               href: '/services#maintenance' },
+              { label: 'Maintenance',              href: '/services#maintenance' },
             ]} />
           </div>
 
@@ -387,15 +403,15 @@ export default function Footer() {
 
           <div className="flex gap-6">
             {[
-              { label: 'Privacy Policy',   href: '/privacy-policy'   },
-              { label: 'Terms of Service', href: '/terms-of-service' },
-              { label: 'Cookie Policy',    href: '/cookie-policy'    },
-            ].map(({ label, href }) => (
-              <a key={label} href={href}
+              { label: 'Privacy Policy',   path: '/privacy-policy'   },
+              { label: 'Terms of Service', path: '/terms-of-service' },
+              { label: 'Cookie Policy',    path: '/cookie-policy'    },
+            ].map(({ label, path }) => (
+              <Link key={label} to={path}
                 className="text-[12.5px] text-slate-400 dark:text-slate-500 hover:text-indigo-500 dark:hover:text-indigo-400 transition-colors font-medium"
               >
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
         </div>
