@@ -324,6 +324,123 @@ const GlobalStyles = () => (
       to { opacity: 1; transform: translateY(0); }
     }
 
+    /* ── Hero section responsive ── */
+    .hero-outer {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 96px 32px;
+      width: 100%;
+    }
+    .hero-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 40px;
+    }
+    .hero-text-col {
+      flex: 1 1 min(100%, 500px);
+      min-width: 0;
+    }
+    .hero-image-col {
+      flex: 1 1 320px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+      min-width: 0;
+    }
+    .hero-image {
+      max-width: 100%;
+      width: 540px;
+      height: auto;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+      opacity: .95;
+      transform: translateY(-80px);
+    }
+    .hero-badge-wrap {
+      margin-bottom: 36px;
+      max-width: 100%;
+      height: auto;
+      white-space: normal;
+      line-height: 1.4;
+    }
+    .hero-title {
+      max-width: 820px;
+      margin-bottom: 28px;
+    }
+    .hero-desc {
+      font-size: 17px;
+      line-height: 1.8;
+      color: var(--ink-3);
+      max-width: 490px;
+      margin-bottom: 44px;
+    }
+    .hero-btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 80px;
+    }
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      max-width: 720px;
+      box-shadow: 0 4px 24px rgba(79,70,229,.06);
+    }
+    .hero-stat-item {
+      padding: 22px 26px;
+      border-left: 1px solid var(--line);
+      position: relative;
+    }
+    .hero-stat-item:first-child { border-left: none; }
+    .hero-stat-num {
+      font-size: 24px; font-weight: 800; letter-spacing: -.03em;
+      line-height: 1; margin-bottom: 5px;
+    }
+    .hero-stat-label { font-size: 11px; font-weight: 700; color: var(--ink-2); margin-bottom: 2px; }
+    .hero-stat-sub { font-size: 10px; color: var(--muted); font-weight: 500; }
+
+    @media (max-width: 900px) {
+      .hero-image { width: 380px; transform: translateY(-40px); }
+    }
+
+    @media (max-width: 768px) {
+      .hero-outer { min-height: auto; padding: 20px 0 0; }
+      .hero-container { padding: 56px 20px 40px; }
+      .hero-row { gap: 28px; }
+      .hero-image-col { order: 2; margin-top: 8px; }
+      .hero-image { width: 300px; transform: translateY(0); }
+      .hero-badge-wrap { margin-bottom: 28px; }
+      .hero-title { margin-bottom: 20px; }
+      .hero-desc { font-size: 15.5px; margin-bottom: 32px; }
+      .hero-btn-row { margin-bottom: 40px; }
+      .hero-stats { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+      .hero-stat-item { padding: 16px 16px; }
+      .hero-stat-item:nth-child(odd) { border-left: none; }
+      .hero-stat-item:nth-child(n+3) { border-top: 1px solid var(--line); }
+    }
+
+    @media (max-width: 480px) {
+      .hero-container { padding: 44px 16px 32px; }
+      .hero-image { width: 220px; }
+      .hero-btn-row a { flex: 1 1 100%; justify-content: center; }
+      .hero-stat-item { padding: 14px 12px; }
+      .hero-stat-num { font-size: 20px; }
+    }
+
   `}</style>
 );
 
@@ -616,31 +733,32 @@ export default function Careers() {
       {/* ══════════════════════════════
           HERO
       ══════════════════════════════ */}
-      <section className="grid-bg" style={{ minHeight: "92vh", display: "flex", alignItems: "center", position: "relative", overflow: "hidden" }}>
+      <section className="grid-bg hero-outer">
         <div className="hero-glow" style={{ width: 600, height: 600, top: -180, right: -60, background: "radial-gradient(circle, rgba(129,140,248,.18) 0%, rgba(79,70,229,.08) 50%, transparent 70%)" }} />
         <div className="hero-glow" style={{ width: 400, height: 400, bottom: -80, left: -60, background: "radial-gradient(circle, rgba(79,70,229,.10) 0%, transparent 70%)" }} />
 
-        <div ref={heroRef} style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 32px", width: "100%", ...reveal(heroVis), transition: "opacity .9s ease, transform .9s ease" }}>
-          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyItems: "space-between", gap: "40px" }}>
+        <div ref={heroRef} className="hero-container" style={{ ...reveal(heroVis), transition: "opacity .9s ease, transform .9s ease" }}>
+          <div className="hero-row">
             
             {/* Left Hero Text Side */}
-            <div style={{ flex: "1 1 500px" }}>
-              <div className="badge" style={{ marginBottom: 36 }}>
-                <span className="pulse-dot" />
-                Building the team · Bangalore &amp; Remote
+            <div className="hero-text-col">
+              {/* Added responsive wrap properties to this badge specifically */}
+              <div className="badge hero-badge-wrap">
+                <span className="pulse-dot" style={{ marginTop: 2 }} />
+                <span>Building the team · Bangalore &amp; Remote</span>
               </div>
 
-              <h1 className="t-hero" style={{ maxWidth: 820, marginBottom: 28 }}>
+              <h1 className="t-hero hero-title">
                 Build work you're <span className="g-text-serif">proud</span> of.
               </h1>
 
-              <p style={{ fontSize: 17, lineHeight: 1.8, color: "var(--ink-3)", maxWidth: 490, marginBottom: 44 }}>
+              <p className="hero-desc">
                 Stryvenix is a focused digital agency building premium websites and
                 AI-powered systems for ambitious brands globally. We look for people
                 who obsess over craft — not just output.
               </p>
 
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginBottom: 80 }}>
+              <div className="hero-btn-row">
                 <a href="#openings" className="btn-primary">
                   See open roles <Icon name="arrowDown" size={15} color="#fff" sw={2.2} />
                 </a>
@@ -650,32 +768,24 @@ export default function Careers() {
               </div>
 
               {/* stat strip */}
-              <div ref={statRef} style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 14, overflow: "hidden", maxWidth: 720, boxShadow: "0 4px 24px rgba(79,70,229,.06)", ...reveal(statVis, 320) }}>
+              <div ref={statRef} className="hero-stats" style={{ ...reveal(statVis, 320) }}>
                 {STATS.map(({ n, l, sub }, i) => (
-                  <div key={l} style={{ padding: "22px 26px", borderLeft: i > 0 ? "1px solid var(--line)" : "none", position: "relative" }}>
+                  <div key={l} className="hero-stat-item">
                     {i === 0 && <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 2, background: "var(--g-primary)", borderRadius: "0 0 2px 2px" }} />}
-                    <div style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-.03em", lineHeight: 1, marginBottom: 5 }} className="g-text">{n}</div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: "var(--ink-2)", marginBottom: 2 }}>{l}</div>
-                    <div style={{ fontSize: 10, color: "var(--muted)", fontWeight: 500 }}>{sub}</div>
+                    <div className="hero-stat-num g-text">{n}</div>
+                    <div className="hero-stat-label">{l}</div>
+                    <div className="hero-stat-sub">{sub}</div>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Right Hero Image Side */}
-            <div style={{ flex: "1 1 400px", display: "flex", justifyContent: "center", alignItems: "center", position: "relative", zIndex: 1 }}>
+            <div className="hero-image-col">
               <img 
                 src="/Assets/Career_1.png" 
                 alt="Career at Stryvenix" 
-                style={{ 
-                  maxWidth: "100%", 
-                  width: "540px", 
-                  height: "auto", 
-                  objectFit: "contain", 
-                  mixBlendMode: "multiply", 
-                  opacity: 0.95,
-                  transform: "translateY(-80px)"
-                }} 
+                className="hero-image"
               />
             </div>
           </div>
@@ -702,12 +812,12 @@ export default function Careers() {
       <BenefitsSection benRef={benRef} benVis={benVis} reveal={reveal} />
 
       {/* ══════════════════════════════
-          VALUES & TEAM
+          VALUES & TEAM (Updated for Responsiveness)
       ══════════════════════════════ */}
       <section style={{ background: "var(--surface)", padding: "96px 0" }} ref={valRef}>
         <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 32px", ...reveal(valVis) }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "64px 80px", alignItems: "start" }}>
-            <div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: "64px 5vw", alignItems: "start" }}>
+            <div style={{ flex: "1 1 min(100%, 450px)" }}>
               <p className="t-label" style={{ marginBottom: 14 }}>How we operate</p>
               <h2 className="t-section" style={{ marginBottom: 48 }}>
                 Strong opinions.<br /><span className="g-text-serif">Loosely held.</span>
@@ -725,8 +835,8 @@ export default function Careers() {
               </div>
             </div>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              <div className="card" style={{ padding: 36, position: "relative", overflow: "hidden" }}>
+            <div style={{ flex: "1 1 min(100%, 450px)", display: "flex", flexDirection: "column", gap: 12 }}>
+              <div className="card" style={{ padding: "clamp(24px, 5vw, 36px)", position: "relative", overflow: "hidden" }}>
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "var(--g-primary)" }} />
                 <div style={{ position: "absolute", top: 0, right: 0, width: 280, height: 280, pointerEvents: "none", background: "radial-gradient(circle at 100% 0%, rgba(79,70,229,.06) 0%, transparent 60%)" }} />
                 
@@ -735,8 +845,8 @@ export default function Careers() {
                   Small team.<br /><span className="g-text-serif">Outsized impact.</span>
                 </h3>
 
-                <div style={{ display: "flex", gap: "20px", alignItems: "center", marginBottom: "28px" }}>
-                  <p style={{ fontSize: 13, lineHeight: 1.85, color: "var(--ink-3)", flex: 1 }}>
+                <div style={{ display: "flex", flexWrap: "wrap-reverse", gap: "20px", alignItems: "center", marginBottom: "28px" }}>
+                  <p style={{ fontSize: 13, lineHeight: 1.85, color: "var(--ink-3)", flex: "1 1 min(100%, 250px)" }}>
                     We keep the team intentionally lean. Fewer meetings, more shipping. Everyone touches real client work — designers who think in systems, developers who care about UX, strategists who write clean briefs. No passengers. No politics.
                   </p>
                   <img 
@@ -744,6 +854,7 @@ export default function Careers() {
                     alt="Team Building Puzzle" 
                     style={{ 
                       width: "140px", 
+                      maxWidth: "100%",
                       height: "auto", 
                       objectFit: "contain", 
                       mixBlendMode: "multiply",
@@ -752,7 +863,7 @@ export default function Careers() {
                   />
                 </div>
 
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 160px), 1fr))", gap: 10 }}>
                   {[["Async-first","Work when you're sharpest"],["No micromanagement","Own your work end-to-end"],["AI-augmented","Always ahead of the curve"],["₹50k learning budget","Grow constantly"]].map(([t, s]) => (
                     <div key={t} style={{ background: "var(--surface-2)", border: "1px solid var(--line-2)", borderRadius: 11, padding: "13px 15px" }}>
                       <p style={{ fontSize: 12, fontWeight: 700, color: "var(--ink)", marginBottom: 3 }}>{t}</p>
